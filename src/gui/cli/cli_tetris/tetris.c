@@ -1,15 +1,15 @@
 #include "tetris.h"
 
-int main() {
-  setup_gui();
-  setup_game();
-  game();
-  delete_gui();
-  free_info();
-  return 0;
-}
+// int main() {
+//   setup_gui();
+//   setup_game();
+//   game_tetris();
+//   delete_gui();
+//   free_info();
+//   return 0;
+// }
 
-void game() {
+void game_tetris() {
   Game_tetris *tetris = get_GameInfo();
 
   while (tetris->state != Exit) {
@@ -98,7 +98,8 @@ void printCurrentState(Game_tetris *tetris) {
     print_game_over();
   } else {
     print_game_board();
-    print_stats(tetris);
+    print_stats();
+    print_stats_tetris(tetris);
     print_now_figure(tetris);
     print_next_figure(tetris);
     print_fall_figure(tetris);

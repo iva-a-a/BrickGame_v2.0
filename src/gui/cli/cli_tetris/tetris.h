@@ -25,10 +25,12 @@
  *останавливается в самом верхнем ряду.
  */
 
-#include "display.h"
+#include "../display.h"
+#include "display_tetris.h"
 
 /**
  * @brief Entry point
+ *
  *
  * Execution of the program
  * starts here.
@@ -40,7 +42,7 @@ int main();
 /**
  * @brief бесконечный цикл игры
  */
-void game();
+void game_tetris();
 
 /**
  * @brief получение данных для отрисовки в интерфейсе

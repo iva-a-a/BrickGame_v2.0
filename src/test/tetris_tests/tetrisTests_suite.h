@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../brick_game/tetris/function.h"
+#include "../brick_game/tetris/back_tetris.h"
 
 void run_testcase(Suite *testscase, int counter_testcase);
 void run_tests();

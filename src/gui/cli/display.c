@@ -14,31 +14,42 @@ UserAction_t input_key() {
   UserAction_t return_key;
   int key = getch(); /*считываем клавишу с клавиатуры*/
   switch (key) {
-    case KEY_DOWN:
-      return_key = Down;
-      break;
-    case KEY_LEFT:
-      return_key = Left;
-      break;
-    case KEY_RIGHT:
-      return_key = Right;
-      break;
-    case 10: /*enter - начало игры*/
-      return_key = Start;
-      break;
-    case 263: /*backspace - пауза*/
-      return_key = Pause;
-      break;
-    case 27: /*esc - завершение игры*/
-      return_key = Terminate;
-      break;
-    case 32: /*пробел - движение (поворот фигуры)*/
-      return_key = Action;
-      break;
-    default:
-      return_key = Up;
+  case KEY_DOWN:
+    return_key = Down;
+    break;
+  case KEY_LEFT:
+    return_key = Left;
+    break;
+  case KEY_RIGHT:
+    return_key = Right;
+    break;
+  case 10: /*enter - начало игры*/
+    return_key = Start;
+    break;
+  case 263: /*backspace - пауза*/
+    return_key = Pause;
+    break;
+  case 27: /*esc - завершение игры*/
+    return_key = Terminate;
+    break;
+  case 32: /*пробел - движение (поворот фигуры)*/
+    return_key = Action;
+    break;
+  case KEY_UP: /*пробел - движение (поворот фигуры)*/
+    return_key = Up;
+    break;
+  default:
+    return_key = None;
+    break;
   }
   return return_key;
+}
+
+void print_game_setection() {
+  mvprintw(1, 7, "BrickGame v2.0");
+  mvprintw(3, 1, "Tetris - press \'T\' or \'t\' for start");
+  mvprintw(4, 1, "Snake  - press \'S\' or \'s\' for start");
+  mvprintw(5, 1, "Exit   - Enter \'Esc\'");
 }
 
 void print_game_board() {
@@ -71,21 +82,14 @@ void print_start() {
   mvprintw(10, 0, " Press ENTER to START%*c", 59, ' ');
 }
 
-void print_stats(Game_tetris *info) {
-  mvprintw(0, 27, "NEXT");
+void print_stats() {
   mvprintw(5, 27, "LEVEL");
   mvprintw(8, 27, "SPEED");
   mvprintw(11, 27, "SCORE");
   mvprintw(14, 27, "HIGH SCORE");
   mvprintw(17, 24, "ESC - exit");
   mvprintw(18, 24, "BACKSPACE - pause");
-  mvprintw(19, 24, "SPACE - rotate");
-  mvprintw(20, 24, "ARROWS - move");
-
-  mvprintw(6, 29, "%d", info->game_info.level);
-  mvprintw(9, 29, "%.2f", (float)1000 / info->game_info.speed);
-  mvprintw(12, 29, "%d", info->game_info.score);
-  mvprintw(15, 29, "%d", info->game_info.high_score);
+  mvprintw(19, 24, "ARROWS - move");
 }
 
 void print_pause() {
@@ -99,36 +103,4 @@ void print_game_over() {
   mvprintw(10, 0, "      GAME OVER!      ");
   mvprintw(11, 0, "%*c", 22, ' ');
   mvprintw(21, 24, "ENTER - restart");
-}
-
-void print_fall_figure(Game_tetris *tetris) {
-  for (int i = 0; i < ROWS_BOARD; i++) {
-    for (int j = 0; j < COL_BOARD; j++) {
-      if (tetris->game_info.field[i][j] == 1) {
-        mvprintw(i + 1, j * 2 + 1, "[]");
-      }
-    }
-  }
-}
-
-void print_now_figure(Game_tetris *tetris) {
-  for (int i = 0; i < ROWS_FIGURE; i++) {
-    for (int j = 0; j < COL_FIGURE; j++) {
-      if (tetris->now[i][j] == 1) {
-        mvprintw(tetris->y + i + 1, (tetris->x + j) * 2 + 1, "[]");
-      }
-    }
-  }
-}
-
-void print_next_figure(Game_tetris *tetris) {
-  for (int i = 0; i < ROWS_FIGURE - 1; i++) {
-    for (int j = 0; j < COL_FIGURE; j++) {
-      if (tetris->game_info.next[i][j] == 1) {
-        mvprintw(2 + i, 28 + j * 2 + 1, "[]");
-      } else {
-        mvprintw(2 + i, 28 + j * 2 + 1, "  ");
-      }
-    }
-  }
 }
