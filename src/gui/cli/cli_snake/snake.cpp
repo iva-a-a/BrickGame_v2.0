@@ -1,12 +1,5 @@
 #include "snake.h"
 
-// int main() {
-//   setup_gui();
-//   game_snake();
-//   delete_gui();
-//   return 0;
-// }
-
 void s21::game_snake() {
   const SnakeGame &snake = SnakeGame::get_instance();
   while (snake.get_state() != Exit) {
@@ -24,15 +17,14 @@ void s21::userInput(UserAction_t currentAction, bool hold) {
   } else if (snake.get_state() == Falling) {
     if (currentAction == Pause) {
       snake.set_state(Break);
-    } else if (currentAction == Left || currentAction == Right /*||
-               currentAction == Down */
-               || currentAction == Up) {
+    } else if (currentAction == Left || currentAction == Right ||
+               currentAction == Down || currentAction == Up) {
       snake.set_state(Moving_rotate);
       snake.set_currAction(currentAction);
 
-    } /*else if (currentAction == Terminate) {
+    } else if (currentAction == Terminate) {
       snake.set_state(End);
-    }*/
+    }
   } else if (snake.get_state() == Break) {
     if (currentAction == Pause) {
       snake.set_state(Falling);

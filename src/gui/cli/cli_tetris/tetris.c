@@ -1,17 +1,7 @@
 #include "tetris.h"
 
-// int main() {
-//   setup_gui();
-//   setup_game();
-//   game_tetris();
-//   delete_gui();
-//   free_info();
-//   return 0;
-// }
-
 void game_tetris() {
   Game_tetris *tetris = get_GameInfo();
-
   while (tetris->state != Exit) {
     userInput(input_key(), false);
     Game_tetris game_state = updateCurrentState();

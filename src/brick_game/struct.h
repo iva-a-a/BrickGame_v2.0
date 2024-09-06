@@ -82,17 +82,17 @@ typedef struct {
  */
 typedef struct {
   /** текущая фигура на поле */
-  int **now;
+  int **now = nullptr;
   /** координата фигуры по строке */
-  int x;
+  int x = 0;
   /** координата фигуры по столбцу */
-  int y;
+  int y = 0;
   /** номер текущей фигуры */
-  int number_now_f;
+  int number_now_f = 0;
   /** номер следующей генерируемой фигуры */
-  int number_next_f;
+  int number_next_f = 0;
   /** предыдущее время падения фигуры */
-  long long int prev_time;
+  long long int prev_time = 0;
   /** частичная информация о текущем состоянии игры */
   GameInfo_t game_info;
   /** информация о состоянии конечного автомата */

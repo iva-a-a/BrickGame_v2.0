@@ -7,7 +7,7 @@
 #include <time.h>
 
 Game_tetris *get_GameInfo() {
-  static Game_tetris Info = {0};
+  static Game_tetris Info;
   return &Info;
 }
 
@@ -52,20 +52,25 @@ void initial_info() {
 
 void free_info() {
   Game_tetris *tetris = get_GameInfo();
-  for (int i = 0; i < ROWS_BOARD; i++) {
-    free(tetris->game_info.field[i]);
-  }
-  free(tetris->game_info.field);
 
-  for (int i = 0; i < ROWS_FIGURE; i++) {
-    free(tetris->game_info.next[i]);
+  if (tetris->game_info.field) {
+    for (int i = 0; i < ROWS_BOARD; i++) {
+      free(tetris->game_info.field[i]);
+    }
+    free(tetris->game_info.field);
   }
-  free(tetris->game_info.next);
-
-  for (int i = 0; i < ROWS_FIGURE; i++) {
-    free(tetris->now[i]);
+  if (tetris->game_info.next) {
+    for (int i = 0; i < ROWS_FIGURE; i++) {
+      free(tetris->game_info.next[i]);
+    }
+    free(tetris->game_info.next);
   }
-  free(tetris->now);
+  if (tetris->now) {
+    for (int i = 0; i < ROWS_FIGURE; i++) {
+      free(tetris->now[i]);
+    }
+    free(tetris->now);
+  }
 }
 
 void clearing_game() {

@@ -25,6 +25,7 @@ UserAction_t input_key();
  * @brief отрисовка заставки для выбора игры
  */
 void print_game_setection();
+void clear_screen();
 
 /**
  * @brief отрисовка игрового поля
