@@ -1,4 +1,4 @@
-#include "brick_game.h"
+#include "brick_game_cli.h"
 
 int main() {
   setup_gui();
@@ -11,10 +11,13 @@ int main() {
       game_tetris();
       clear_screen();
     } else if (key == 's' || key == 'S') {
-      s21::game_snake();
+      /*ПРОВЕРИТЬ ВТОРОЙ ЗАХОД!*/
+      s21::SnakeGame model{};
+      s21::Controller controller{&model};
+      s21::SnakeDisplay gmae{&controller};
+      gmae.game_snake();
       clear_screen();
     }
-
     key = getch();
   }
 

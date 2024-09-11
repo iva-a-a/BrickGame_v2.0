@@ -45,7 +45,7 @@ $(LIBRARY_TET): $(LIBDIR_TET)/back_tetris.o
 	ar rcs $@ $^
 	ranlib $@
 
-$(LIBRARY_SN): $(LIBDIR_SN)/back_snake.o
+$(LIBRARY_SN): $(LIBDIR_SN)/controller_snake.o $(LIBDIR_SN)/model_snake.o
 	ar rcs $@ $^
 	ranlib $@
 

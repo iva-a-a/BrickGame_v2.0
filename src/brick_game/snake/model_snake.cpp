@@ -1,4 +1,4 @@
-#include "back_snake.h"
+#include "model_snake.h"
 
 using namespace s21;
 

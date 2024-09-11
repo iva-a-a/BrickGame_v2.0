@@ -1,15 +1,10 @@
-#include "snake.h"
+#include "controller_snake.h"
 
-void s21::game_snake() {
-  const SnakeGame &snake = SnakeGame::get_instance();
-  while (snake.get_state() != Exit) {
-    userInput(input_key(), false);
-    updateCurrentState();
-    printCurrentState();
-  }
-}
+using namespace s21;
 
-void s21::userInput(UserAction_t currentAction, bool hold) {
+Controller::Controller(SnakeGame *model) : model{model} {}
+
+void Controller::userInput(UserAction_t currentAction, bool hold) {
   SnakeGame &snake = SnakeGame::get_instance();
   hold = true;
   if (currentAction == Start && snake.get_state() == Begin && hold == true) {
@@ -40,7 +35,7 @@ void s21::userInput(UserAction_t currentAction, bool hold) {
   }
 }
 
-GameInfo_t s21::updateCurrentState() {
+GameInfo_t Controller::updateCurrentState() {
   SnakeGame &snake = SnakeGame::get_instance();
   bool hold = false;
   if (snake.get_state() == Begin) {
@@ -61,28 +56,4 @@ GameInfo_t s21::updateCurrentState() {
     snake.set_state(Generation);
   }
   return snake.get_GameInfo();
-}
-
-void s21::printCurrentState() {
-  SnakeGame &snake = SnakeGame::get_instance();
-  if (snake.get_state() == Begin) {
-    print_start();
-  } else if (snake.get_state() == End) {
-    if (snake.get_GameInfo().score == SCORE_WIN) {
-      print_stats_snake(snake.get_GameInfo());
-      print_win();
-    } else {
-      print_game_over();
-    }
-  } else {
-    print_game_board();
-    print_stats();
-    print_stats_snake(snake.get_GameInfo());
-    print_apple(snake.get_apple());
-    print_snake(snake.get_snake());
-    if (snake.get_state() == Break) {
-      print_pause();
-    }
-  }
-  refresh();
 }
