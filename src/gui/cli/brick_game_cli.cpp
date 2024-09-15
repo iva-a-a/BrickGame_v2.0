@@ -12,10 +12,11 @@ int main() {
       clear_screen();
     } else if (key == 's' || key == 'S') {
       /*ПРОВЕРИТЬ ВТОРОЙ ЗАХОД!*/
-      s21::SnakeGame model{};
+      // s21::SnakeGame model{};
+      s21::SnakeGame &model = s21::SnakeGame::get_instance();
       s21::Controller controller{&model};
-      s21::SnakeDisplay gmae{&controller};
-      gmae.game_snake();
+      s21::SnakeDisplay game{&controller};
+      game.game_snake();
       clear_screen();
     }
     key = getch();

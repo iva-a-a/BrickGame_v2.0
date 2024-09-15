@@ -5,7 +5,6 @@
 namespace s21 {
 
 class Controller {
-
 public:
   SnakeGame *model;
   Controller(SnakeGame *model);

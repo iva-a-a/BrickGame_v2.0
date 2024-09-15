@@ -32,11 +32,12 @@ private:
   UserAction_t currentAction;  /*кнопки*/
   /** предыдущее время падения фигуры */
   long long int prev_time;
-
-public:
   SnakeGame();
   ~SnakeGame() = default;
+  SnakeGame(SnakeGame const &) = delete;
+  SnakeGame &operator=(SnakeGame const &) = delete;
 
+public:
   void set_state(GameState_t state);
   GameState_t get_state() const;
 

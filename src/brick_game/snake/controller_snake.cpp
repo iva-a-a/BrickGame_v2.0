@@ -33,6 +33,9 @@ void Controller::userInput(UserAction_t currentAction, bool hold) {
       snake.set_state(Exit);
     }
   }
+  // if (hold) {
+  //   snake.move_snake();
+  // }
 }
 
 GameInfo_t Controller::updateCurrentState() {

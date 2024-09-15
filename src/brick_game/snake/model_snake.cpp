@@ -125,6 +125,8 @@ void SnakeGame::move_snake() {
       snake.pop_front();
     }
     if (collision(pos)) {
+      snake.pop_back();
+      snake.push_front(pos);
       state = End;
     }
     prev_time = time;
@@ -142,6 +144,9 @@ void SnakeGame::change_direction(UserAction_t currentAction, bool hold) {
   } else if (currentAction == Right && dir != Direction::Left) {
     dir = Direction::Right;
   }
+  // if (hold) {
+  //   move_snake();
+  // }
   /*реализовать холд*/
 }
 
