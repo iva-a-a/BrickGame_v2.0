@@ -1,8 +1,9 @@
 #include "model_snake.h"
 
+#include <fstream>
+
 using namespace s21;
 
-GameInfo_t &SnakeGame::get_GameInfo() { return gameInfo; }
 UserAction_t SnakeGame::get_currAction() { return currentAction; }
 void SnakeGame::set_currAction(UserAction_t action) {
   this->currentAction = action;
@@ -15,24 +16,30 @@ void SnakeGame::set_prev_time(long long int time) { prev_time = time; }
 Coordinate SnakeGame::get_apple() { return apple; }
 
 void SnakeGame::initial_info() {
-  FILE *highScore;
-  highScore = fopen("highscore_snake.txt", "r");
-  if (highScore) {
-    if (fscanf(highScore, "%d", &gameInfo.high_score) == 0) {
-      gameInfo.high_score = 0;
-    }
-    fclose(highScore);
+  std::ifstream inputFile("highscore_snake.txt");
+
+  if (inputFile.is_open()) {
+    inputFile >> s_high_score;
+    inputFile.close();
+  } else {
+    std::ofstream outputFile("highscore_snake.txt");
+    s_high_score = 0;
+    outputFile << s_high_score;
+    outputFile.close();
   }
   clearing_game();
 }
 
+int SnakeGame::get_score() { return this->s_score; }
+int SnakeGame::get_high_score() { return this->s_high_score; }
+int SnakeGame::get_level() { return this->s_level; }
+int SnakeGame::get_speed() { return this->s_speed; }
+
 void SnakeGame::clearing_game() {
 
-  gameInfo.score = 0;
-  gameInfo.level = 1;
-  gameInfo.speed = 500;
-  gameInfo.pause = 0;
-
+  s_score = 0;
+  s_level = 1;
+  s_speed = 500;
   prev_time = 0;
 
   currentAction = None;
@@ -63,13 +70,8 @@ void SnakeGame::create_snake() { snake = {{18, 5}, {17, 5}, {16, 5}, {15, 5}}; }
 
 /*конструктор по умолчанию - иницилизация игры*/
 SnakeGame::SnakeGame() {
-  srand(time(NULL)); //вынести в мейн
+  srand(time(NULL));
   initial_info();
-}
-
-SnakeGame &SnakeGame::get_instance() {
-  static SnakeGame snake;
-  return snake;
 }
 
 void SnakeGame::set_state(GameState_t state) { this->state = state; }
@@ -100,6 +102,7 @@ bool SnakeGame::collision(const Coordinate &pos) {
   if (pos.x < 0 || pos.x >= ROWS_BOARD || pos.y < 0 || pos.y >= COL_BOARD) {
     return true;
   }
+  /*проверить на столкновение с хвостом!*/
   for (auto i = --(--snake.end()); i != snake.begin(); i--) {
     if (pos.eq_coordinate(*i)) {
       return true;
@@ -108,34 +111,38 @@ bool SnakeGame::collision(const Coordinate &pos) {
   return false;
 }
 
-/*движение змейки*/
 void SnakeGame::move_snake() {
-  long long int time = time_in_millisec();
   Coordinate pos = snake_head_new_pos();
-  if (time - prev_time > gameInfo.speed) {
-    snake.push_back(pos);
-    if (pos.eq_coordinate(apple) == true) {
-      gameInfo.score++;
-      if (gameInfo.score == SCORE_WIN) {
-        state = End;
-      } else {
-        state = Attaching;
-      }
-    } else {
-      snake.pop_front();
-    }
-    if (collision(pos)) {
-      snake.pop_back();
-      snake.push_front(pos);
+  snake.push_back(pos);
+  if (pos.eq_coordinate(apple) == true) {
+    s_score++;
+    if (s_score == SCORE_WIN) {
       state = End;
+    } else {
+      state = Attaching;
     }
+  } else {
+    snake.pop_front();
+  }
+  if (collision(pos)) {
+    snake.pop_back();
+    snake.push_front(pos);
+    state = End;
+  }
+}
+
+/*движение змейки*/
+void SnakeGame::check_move_snake() {
+  long long int time = time_in_millisec();
+
+  if (time - prev_time > s_speed) {
+    move_snake();
     prev_time = time;
   }
 }
 
-void SnakeGame::change_direction(UserAction_t currentAction, bool hold) {
-  hold = true;
-  if (currentAction == Down && dir != Direction::Up && hold == true) {
+void SnakeGame::change_direction(UserAction_t currentAction) {
+  if (currentAction == Down && dir != Direction::Up) {
     dir = Direction::Down;
   } else if (currentAction == Up && dir != Direction::Down) {
     dir = Direction::Up;
@@ -144,30 +151,42 @@ void SnakeGame::change_direction(UserAction_t currentAction, bool hold) {
   } else if (currentAction == Right && dir != Direction::Left) {
     dir = Direction::Right;
   }
-  // if (hold) {
-  //   move_snake();
-  // }
-  /*реализовать холд*/
 }
 
 void SnakeGame::increase_level() {
-  while (gameInfo.score >= gameInfo.level * LEVEL_NEXT_SNAKE &&
-         gameInfo.level != MAX_LEVEL) {
-    if (gameInfo.level < MAX_LEVEL) {
-      gameInfo.level++;
-      gameInfo.speed -= 50;
+  while (s_score >= s_level * LEVEL_NEXT_SNAKE && s_level != MAX_LEVEL) {
+    if (s_level < MAX_LEVEL) {
+      s_level++;
+      s_speed -= 50;
     }
   }
 }
 
 void SnakeGame::save_high_score() {
-  if (gameInfo.score >= gameInfo.high_score) {
-    gameInfo.high_score = gameInfo.score;
-    FILE *highScore;
-    highScore = fopen("highscore_snake.txt", "w");
-    if (highScore) {
-      fprintf(highScore, "%d", gameInfo.high_score);
-      fclose(highScore);
-    }
+  if (s_score >= s_high_score) {
+    s_high_score = s_score;
+    std::ofstream outputFile("highscore_snake.txt");
+    outputFile << s_high_score;
+    outputFile.close();
+  }
+}
+
+void SnakeGame::update() {
+  if (state == Begin) {
+    clearing_game();
+  } else if (state == Generation) {
+    set_prev_time(time_in_millisec());
+    put_apple();
+    set_state(Falling);
+  } else if (state == Falling) {
+    check_move_snake();
+  } else if (state == Moving_rotate) {
+    change_direction(currentAction);
+    snake_head_new_pos();
+    set_state(Falling);
+  } else if (state == Attaching) {
+    increase_level();
+    save_high_score();
+    state = Generation;
   }
 }

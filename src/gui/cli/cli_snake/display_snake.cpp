@@ -4,14 +4,15 @@ using namespace s21;
 
 SnakeDisplay::SnakeDisplay(Controller *c) : controller{c} {}
 
-void SnakeDisplay::print_snake(std::list<Coordinate> snake) {
-  for (auto &i : snake) {
-    mvprintw(i.x + 1, i.y * 2 + 1, "[]");
+void SnakeDisplay::print_arr(int **arr) {
+  if (arr == nullptr) {
+    return;
   }
-}
-
-void SnakeDisplay::print_apple(Coordinate apple) {
-  mvprintw(apple.x + 1, apple.y * 2 + 1, "[]");
+  size_t i = 0;
+  while (arr[i][0] != -1 && arr[i][1] != -1) {
+    mvprintw(arr[i][0] + 1, arr[i][1] * 2 + 1, "[]");
+    i++;
+  }
 }
 
 void SnakeDisplay::print_win() {
@@ -20,28 +21,32 @@ void SnakeDisplay::print_win() {
   mvprintw(11, 0, "%*c", 22, ' ');
 }
 
-void SnakeDisplay::print_stats_snake(GameInfo_t gameInfo) {
-  mvprintw(6, 29, "%d", gameInfo.level);
-  mvprintw(9, 29, "%.2f", (float)500 / gameInfo.speed);
-  mvprintw(12, 29, "%d", gameInfo.score);
-  mvprintw(15, 29, "%d", gameInfo.high_score);
+void SnakeDisplay::print_stats_snake(int level, int speed, int score,
+                                     int high_score) {
+  mvprintw(6, 29, "%d", level);
+  mvprintw(9, 29, "%.2f", (float)500 / speed);
+  mvprintw(12, 29, "%d", score);
+  mvprintw(15, 29, "%d", high_score);
 }
 
 void SnakeDisplay::game_snake() {
-  const SnakeGame &snake = SnakeGame::get_instance();
-  while (snake.get_state() != Exit) {
-    controller->userInput(input_key(), false);
-    controller->updateCurrentState();
-    printCurrentState();
+  while (controller->model->get_state() != Exit) {
+    UserAction_t prev_key = controller->model->get_currAction();
+    UserAction_t key = input_key();
+    controller->userInput(key, prev_key == key && key != None);
+    GameInfo_t info = controller->updateCurrentState();
+    printCurrentState(info);
+    controller->clearGameInfo(info);
   }
 }
-void SnakeDisplay::printCurrentState() {
-  SnakeGame &snake = SnakeGame::get_instance();
-  if (snake.get_state() == Begin) {
+
+void SnakeDisplay::printCurrentState(GameInfo_t &info) {
+  GameState_t state = controller->model->get_state();
+  if (state == Begin) {
     print_start();
-  } else if (snake.get_state() == End) {
-    if (snake.get_GameInfo().score == SCORE_WIN) {
-      print_stats_snake(snake.get_GameInfo());
+  } else if (state == End) {
+    if (info.score == SCORE_WIN) {
+      print_stats_snake(info.level, info.speed, info.score, info.high_score);
       print_win();
     } else {
       print_game_over();
@@ -49,10 +54,10 @@ void SnakeDisplay::printCurrentState() {
   } else {
     print_game_board();
     print_stats();
-    print_stats_snake(snake.get_GameInfo());
-    print_apple(snake.get_apple());
-    print_snake(snake.get_snake());
-    if (snake.get_state() == Break) {
+    print_stats_snake(info.level, info.speed, info.score, info.high_score);
+    print_arr(info.field);
+    print_arr(info.next);
+    if (state == Break) {
       print_pause();
     }
   }

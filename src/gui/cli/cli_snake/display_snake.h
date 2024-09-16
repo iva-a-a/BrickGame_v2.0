@@ -13,11 +13,10 @@ public:
   ~SnakeDisplay() = default;
 
   void print_win();
-  void print_snake(std::list<Coordinate> snake);
-  void print_apple(Coordinate apple);
-  void print_stats_snake(GameInfo_t gameInfo);
+  void print_arr(int **arr);
+  void print_stats_snake(int level, int speed, int score, int high_score);
 
   void game_snake();
-  void printCurrentState();
+  void printCurrentState(GameInfo_t &info);
 };
 } // namespace s21

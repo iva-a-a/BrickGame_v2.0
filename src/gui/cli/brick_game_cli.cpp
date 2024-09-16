@@ -11,9 +11,7 @@ int main() {
       game_tetris();
       clear_screen();
     } else if (key == 's' || key == 'S') {
-      /*ПРОВЕРИТЬ ВТОРОЙ ЗАХОД!*/
-      // s21::SnakeGame model{};
-      s21::SnakeGame &model = s21::SnakeGame::get_instance();
+      s21::SnakeGame model{};
       s21::Controller controller{&model};
       s21::SnakeDisplay game{&controller};
       game.game_snake();
