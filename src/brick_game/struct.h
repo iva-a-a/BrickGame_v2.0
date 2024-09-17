@@ -81,6 +81,11 @@ typedef struct {
  * @brief полная информация о текущем состоянии игры
  */
 typedef struct {
+  /** игровое поле */
+  int **field = nullptr;
+  /** превью фигура */
+  int **next = nullptr;
+
   /** текущая фигура на поле */
   int **now = nullptr;
   /** координата фигуры по строке */
@@ -93,8 +98,17 @@ typedef struct {
   int number_next_f = 0;
   /** предыдущее время падения фигуры */
   long long int prev_time = 0;
+
+  /** количество очков */
+  int score = 0;
+  /** количество рекордных очков */
+  int high_score = 0;
+  /** номер уровня */
+  int level = 0;
+  /** скорость */
+  int speed = 0;
   /** частичная информация о текущем состоянии игры */
-  GameInfo_t game_info;
+  // GameInfo_t game_info;
   /** информация о состоянии конечного автомата */
   GameState_t state;
 } Game_tetris;

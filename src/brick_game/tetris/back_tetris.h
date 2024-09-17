@@ -11,7 +11,8 @@
  *
  * @return возвращает структуру, содержащую информацию о текущем состоянии игры
  */
-Game_tetris *get_GameInfo();
+
+GameInfo_t *get_GameInfo();
 
 /**
  * @brief получение времени в миллисекундах
@@ -23,17 +24,17 @@ long long int time_in_millisec();
 /**
  * @brief иницилизация игры
  */
-void setup_game();
+void setup_game(Game_tetris *tetris);
 
 /**
  * @brief начальное состояние игры
  */
-void initial_info();
+void initial_info(Game_tetris *tetris);
 
 /**
  * @brief очистка состояние игры
  */
-void free_info();
+void free_info(Game_tetris *tetris);
 
 /**
  * @brief рандомноя фигура
@@ -144,6 +145,14 @@ void clear_mat(int **matrix, int x, int y);
  * @brief очистка состояния игры
  */
 
-void clearing_game();
+void clearing_game(Game_tetris *tetris);
+
+void update(Game_tetris *tetris);
+
+int **convert_matrix(int **arr1, int row, int col, int x, int y);
+int **join_matrix(int **arr1, int **arr2);
+void free_matrix(int **arr);
+
+void free_gameinfo(GameInfo_t *info);
 
 #endif

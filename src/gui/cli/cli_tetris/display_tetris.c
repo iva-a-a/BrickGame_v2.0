@@ -1,43 +1,51 @@
 #include "display_tetris.h"
 
-void print_stats_tetris(Game_tetris *info) {
+void print_stats_tetris() {
   mvprintw(0, 27, "NEXT");
   mvprintw(20, 24, "SPACE - rotate");
-
-  mvprintw(6, 29, "%d", info->game_info.level);
-  mvprintw(9, 29, "%.2f", (float)1000 / info->game_info.speed);
-  mvprintw(12, 29, "%d", info->game_info.score);
-  mvprintw(15, 29, "%d", info->game_info.high_score);
 }
 
-void print_fall_figure(Game_tetris *tetris) {
-  for (int i = 0; i < ROWS_BOARD; i++) {
-    for (int j = 0; j < COL_BOARD; j++) {
-      if (tetris->game_info.field[i][j] == 1) {
-        mvprintw(i + 1, j * 2 + 1, "[]");
-      }
-    }
-  }
-}
-
-void print_now_figure(Game_tetris *tetris) {
-  for (int i = 0; i < ROWS_FIGURE; i++) {
-    for (int j = 0; j < COL_FIGURE; j++) {
-      if (tetris->now[i][j] == 1) {
-        mvprintw(tetris->y + i + 1, (tetris->x + j) * 2 + 1, "[]");
-      }
-    }
-  }
-}
-
-void print_next_figure(Game_tetris *tetris) {
+void clear_next_figure() {
   for (int i = 0; i < ROWS_FIGURE - 1; i++) {
     for (int j = 0; j < COL_FIGURE; j++) {
-      if (tetris->game_info.next[i][j] == 1) {
-        mvprintw(2 + i, 28 + j * 2 + 1, "[]");
-      } else {
-        mvprintw(2 + i, 28 + j * 2 + 1, "  ");
-      }
+      mvprintw(2 + i, 26 + j * 2 + 1, "  ");
     }
   }
+}
+
+void printCurrentState(GameInfo_t *info) {
+  int *state = &info->pause;
+  if (*state == Begin) {
+    print_start();
+  } else if (*state == End) {
+    print_game_over();
+  } else {
+    print_game_board();
+    print_stats_ban();
+    print_stats_tetris();
+    print_stats(info->level, info->speed, info->score, info->high_score);
+    print_arr(info->field);
+    clear_next_figure();
+    print_arr(info->next);
+    if (*state == Break) {
+      print_pause();
+    }
+  }
+  refresh();
+}
+
+void game_tetris() {
+  Game_tetris tetris;
+  setup_game(&tetris);
+  while (tetris.state != Exit) {
+    GameInfo_t *info = get_GameInfo();
+    info->pause = (int)tetris.state;
+    userInput(input_key(), false);
+    tetris.state = (GameState_t)info->pause;
+    update(&tetris);
+    GameInfo_t info_tetris = updateCurrentState();
+    printCurrentState(&info_tetris);
+    free_gameinfo(&info_tetris);
+  }
+  free_info(&tetris);
 }

@@ -6,8 +6,8 @@
 #include <sys/time.h>
 #include <time.h>
 
-Game_tetris *get_GameInfo() {
-  static Game_tetris Info;
+GameInfo_t *get_GameInfo() {
+  static GameInfo_t Info;
   return &Info;
 }
 
@@ -17,28 +17,27 @@ long long int time_in_millisec() {
   return (((long long int)tv.tv_sec) * 1000) + (tv.tv_usec / 1000);
 }
 
-void setup_game() {
+void setup_game(Game_tetris *tetris) {
   srand(time(NULL));
-  initial_info();
+  initial_info(tetris);
 }
 
-void initial_info() {
-  Game_tetris *tetris = get_GameInfo();
-  tetris->game_info.field = (int **)malloc(sizeof(int *) * ROWS_BOARD);
+void initial_info(Game_tetris *tetris) {
+  tetris->field = (int **)malloc(sizeof(int *) * ROWS_BOARD);
   for (int i = 0; i < ROWS_BOARD; i++) {
-    tetris->game_info.field[i] = (int *)calloc(sizeof(int), COL_BOARD);
+    tetris->field[i] = (int *)calloc(sizeof(int), COL_BOARD);
   }
 
-  tetris->game_info.next = (int **)malloc(sizeof(int *) * ROWS_FIGURE);
+  tetris->next = (int **)malloc(sizeof(int *) * ROWS_FIGURE);
   for (int i = 0; i < ROWS_FIGURE; i++) {
-    tetris->game_info.next[i] = (int *)calloc(sizeof(int), COL_FIGURE);
+    tetris->next[i] = (int *)calloc(sizeof(int), COL_FIGURE);
   }
 
   FILE *highScore;
   highScore = fopen("highscore_tetris.txt", "r");
   if (highScore) {
-    if (fscanf(highScore, "%d", &tetris->game_info.high_score) == 0) {
-      tetris->game_info.high_score = 0;
+    if (fscanf(highScore, "%d", &tetris->high_score) == 0) {
+      tetris->high_score = 0;
     }
     fclose(highScore);
   }
@@ -47,23 +46,22 @@ void initial_info() {
   for (int i = 0; i < ROWS_FIGURE; i++) {
     tetris->now[i] = (int *)malloc(sizeof(int) * COL_FIGURE);
   }
-  clearing_game();
+  clearing_game(tetris);
 }
 
-void free_info() {
-  Game_tetris *tetris = get_GameInfo();
+void free_info(Game_tetris *tetris) {
 
-  if (tetris->game_info.field) {
+  if (tetris->field) {
     for (int i = 0; i < ROWS_BOARD; i++) {
-      free(tetris->game_info.field[i]);
+      free(tetris->field[i]);
     }
-    free(tetris->game_info.field);
+    free(tetris->field);
   }
-  if (tetris->game_info.next) {
+  if (tetris->next) {
     for (int i = 0; i < ROWS_FIGURE; i++) {
-      free(tetris->game_info.next[i]);
+      free(tetris->next[i]);
     }
-    free(tetris->game_info.next);
+    free(tetris->next);
   }
   if (tetris->now) {
     for (int i = 0; i < ROWS_FIGURE; i++) {
@@ -73,15 +71,13 @@ void free_info() {
   }
 }
 
-void clearing_game() {
-  Game_tetris *tetris = get_GameInfo();
-  clear_mat(tetris->game_info.field, ROWS_BOARD, COL_BOARD);
-  clear_mat(tetris->game_info.next, ROWS_FIGURE, COL_FIGURE);
+void clearing_game(Game_tetris *tetris) {
+  clear_mat(tetris->field, ROWS_BOARD, COL_BOARD);
+  clear_mat(tetris->next, ROWS_FIGURE, COL_FIGURE);
 
-  tetris->game_info.score = 0;
-  tetris->game_info.level = 1;
-  tetris->game_info.speed = 1000;
-  tetris->game_info.pause = 0;
+  tetris->score = 0;
+  tetris->level = 1;
+  tetris->speed = 1000;
 
   clear_mat(tetris->now, ROWS_FIGURE, COL_FIGURE);
 
@@ -97,7 +93,7 @@ void gen_rand_figure(Game_tetris *tetris) {
   int num = rand() % TETRIS_F;
   for (int i = 0; i < ROWS_FIGURE; i++) {
     for (int j = 0; j < COL_FIGURE; j++) {
-      tetris->game_info.next[i][j] = figs[num][i][j];
+      tetris->next[i][j] = figs[num][i][j];
     }
   }
   tetris->number_next_f = num;
@@ -105,7 +101,7 @@ void gen_rand_figure(Game_tetris *tetris) {
 
 void fall_figure(Game_tetris *tetris) {
   long long int time = time_in_millisec();
-  if (time - tetris->prev_time > tetris->game_info.speed) {
+  if (time - tetris->prev_time > tetris->speed) {
     tetris->y++;
     if (collision(tetris) != 0) {
       tetris->y--;
@@ -166,7 +162,7 @@ void move_figure(Game_tetris *tetris, UserAction_t key) {
 void copy_figures(Game_tetris *tetris) {
   for (int i = 0; i < ROWS_FIGURE; i++) {
     for (int j = 0; j < COL_FIGURE; j++) {
-      tetris->now[i][j] = tetris->game_info.next[i][j];
+      tetris->now[i][j] = tetris->next[i][j];
     }
   }
   tetris->number_now_f = tetris->number_next_f;
@@ -176,7 +172,7 @@ void filling_field(Game_tetris *tetris) {
   for (int i = 0; i < ROWS_FIGURE; i++) {
     for (int j = 0; j < COL_FIGURE; j++) {
       if (tetris->y + i >= 0 && tetris->x + j >= 0 && tetris->now[i][j] == 1) {
-        tetris->game_info.field[tetris->y + i][tetris->x + j] = 1;
+        tetris->field[tetris->y + i][tetris->x + j] = 1;
       }
     }
   }
@@ -188,7 +184,7 @@ int remove_row(Game_tetris *tetris) {
   for (int i = ROWS_BOARD - 1; i >= 0; i--) {
     bool is_full = true;
     for (int j = 0; j < COL_BOARD; j++) {
-      if (tetris->game_info.field[i][j] == 0) {
+      if (tetris->field[i][j] == 0) {
         is_full = false;
       }
     }
@@ -198,8 +194,8 @@ int remove_row(Game_tetris *tetris) {
       count++;
       for (int k = full_row; k > 0; k--) {
         for (int j = 0; j < COL_BOARD; j++) {
-          tetris->game_info.field[k][j] = tetris->game_info.field[k - 1][j];
-          tetris->game_info.field[k - 1][j] = 0;
+          tetris->field[k][j] = tetris->field[k - 1][j];
+          tetris->field[k - 1][j] = 0;
         }
       }
       i++;
@@ -210,22 +206,22 @@ int remove_row(Game_tetris *tetris) {
 
 void scoring_points(Game_tetris *tetris, int count) {
   if (count == 1) {
-    tetris->game_info.score += SCORE_1;
+    tetris->score += SCORE_1;
   } else if (count == 2) {
-    tetris->game_info.score += SCORE_2;
+    tetris->score += SCORE_2;
   } else if (count == 3) {
-    tetris->game_info.score += SCORE_3;
+    tetris->score += SCORE_3;
   } else if (count == 4) {
-    tetris->game_info.score += SCORE_4;
+    tetris->score += SCORE_4;
   }
 }
 
 void increase_level(Game_tetris *tetris) {
-  while (tetris->game_info.score >= tetris->game_info.level * LEVEL_NEXT &&
-         tetris->game_info.level != MAX_LEVEL) {
-    if (tetris->game_info.level < MAX_LEVEL) {
-      tetris->game_info.level++;
-      tetris->game_info.speed -= 100;
+  while (tetris->score >= tetris->level * LEVEL_NEXT &&
+         tetris->level != MAX_LEVEL) {
+    if (tetris->level < MAX_LEVEL) {
+      tetris->level++;
+      tetris->speed -= 100;
     }
   }
 }
@@ -238,7 +234,7 @@ int collision(Game_tetris *tetris) {
         int x = tetris->x + j, y = tetris->y + i;
         if (x < 0 || x >= COL_BOARD || y >= ROWS_BOARD || y < 0) {
           is_col = 1; /*касание с краями поля*/
-        } else if (tetris->game_info.field[y][x] == 1) {
+        } else if (tetris->field[y][x] == 1) {
           is_col = 2; /*касание с фигурой на поле*/
         }
       }
@@ -248,12 +244,12 @@ int collision(Game_tetris *tetris) {
 }
 
 void save_high_score(Game_tetris *tetris) {
-  if (tetris->game_info.score >= tetris->game_info.high_score) {
-    tetris->game_info.high_score = tetris->game_info.score;
+  if (tetris->score >= tetris->high_score) {
+    tetris->high_score = tetris->score;
     FILE *highScore;
     highScore = fopen("highscore_tetris.txt", "w");
     if (highScore) {
-      fprintf(highScore, "%d", tetris->game_info.high_score);
+      fprintf(highScore, "%d", tetris->high_score);
       fclose(highScore);
     }
   }
@@ -265,4 +261,131 @@ void clear_mat(int **matrix, int x, int y) {
       matrix[i][j] = 0;
     }
   }
+}
+
+void update(Game_tetris *tetris) {
+  if (tetris->state == Begin) {
+    clearing_game(tetris);
+  } else if (tetris->state == Generation) {
+    tetris->x = COL_BOARD / 2 - COL_FIGURE / 2;
+    tetris->y = 0;
+    tetris->prev_time = time_in_millisec();
+    copy_figures(tetris);
+    gen_rand_figure(tetris);
+    if (collision(tetris) == 0) {
+      tetris->state = Falling;
+    } else {
+      tetris->state = End;
+    }
+  } else if (tetris->state == Falling) {
+    fall_figure(tetris);
+  } else if (tetris->state == Moving_down) {
+    move_figure(tetris, Down);
+    tetris->state = Falling;
+  } else if (tetris->state == Moving_left) {
+    move_figure(tetris, Left);
+    tetris->state = Falling;
+  } else if (tetris->state == Moving_right) {
+    move_figure(tetris, Right);
+    tetris->state = Falling;
+  } else if (tetris->state == Moving_rotate) {
+    rotate_figure(tetris);
+    tetris->state = Falling;
+  } else if (tetris->state == Attaching) {
+    filling_field(tetris);
+    scoring_points(tetris, remove_row(tetris));
+    increase_level(tetris);
+    save_high_score(tetris);
+    tetris->state = Generation;
+  }
+
+  GameInfo_t *info = get_GameInfo();
+  if (info) {
+    info->field = convert_matrix(tetris->field, ROWS_BOARD, COL_BOARD, 0, 0);
+    int **t_next = convert_matrix(tetris->next, ROWS_FIGURE, COL_FIGURE, 1, 13);
+    int **t_now = convert_matrix(tetris->now, ROWS_FIGURE, COL_FIGURE,
+                                 tetris->y, tetris->x);
+    info->next = join_matrix(t_next, t_now);
+  }
+  info->score = tetris->score;
+  info->high_score = tetris->high_score;
+  info->level = tetris->level;
+  info->speed = tetris->speed;
+}
+
+int **convert_matrix(int **arr1, int row, int col, int x, int y) {
+  int count = 0;
+  for (int i = 0; i < row; i++) {
+    for (int j = 0; j < col; j++) {
+      if (arr1[i][j] == 1) {
+        count++;
+      }
+    }
+  }
+  int **mat = (int **)malloc((count + 1) * sizeof(int *));
+  int k = 0;
+  for (int i = 0; i < row; i++) {
+    for (int j = 0; j < col; j++) {
+      if (arr1[i][j] == 1) {
+        mat[k] = (int *)malloc(2 * sizeof(int));
+        mat[k][0] = i + x;
+        mat[k][1] = j + y;
+        k++;
+      }
+    }
+  }
+  mat[k] = (int *)malloc(2 * sizeof(int));
+  mat[k][0] = -1;
+  mat[k][1] = -1;
+  return mat;
+}
+
+int **join_matrix(int **arr1, int **arr2) {
+  int i = 0;
+  int count = 0;
+  while (arr1[i][0] != -1 && arr1[i][1] != -1) {
+    i++;
+    count++;
+  }
+  i = 0;
+  while (arr2[i][0] != -1 && arr2[i][1] != -1) {
+    i++;
+    count++;
+  }
+  int **mat = (int **)malloc((count + 1) * sizeof(int *));
+  i = 0;
+  int j = 0;
+  while (arr1[i][0] != -1 && arr1[i][1] != -1) {
+    mat[j] = arr1[i];
+    i++;
+    j++;
+  }
+  free(arr1[i]);
+  i = 0;
+  while (arr2[i][0] != -1 && arr2[i][1] != -1) {
+    mat[j] = arr2[i];
+    i++;
+    j++;
+  }
+  mat[j] = arr2[i];
+  free(arr1);
+  free(arr2);
+  return mat;
+}
+
+void free_matrix(int **arr) {
+  if (arr) {
+    size_t i = 0;
+    while (arr[i][0] != -1 && arr[i][1] != -1) {
+      free(arr[i]);
+      i++;
+    }
+    free(arr[i]);
+    free(arr);
+  }
+}
+
+void free_gameinfo(GameInfo_t *info) {
+  free_matrix(info->field);
+  free_matrix(info->next);
 }

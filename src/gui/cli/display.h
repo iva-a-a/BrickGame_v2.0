@@ -35,7 +35,7 @@ void print_game_board();
 /**
  * @brief вывод информациии об игре
  */
-void print_stats();
+void print_stats_ban();
 
 /**
  * @brief вывод заставки начала игры
@@ -51,5 +51,9 @@ void print_pause();
  * @brief вывод результатов
  */
 void print_game_over();
+
+void print_arr(int **arr);
+
+void print_stats(int level, int speed, int score, int high_score);
 
 #endif

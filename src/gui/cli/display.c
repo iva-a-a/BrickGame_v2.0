@@ -91,7 +91,7 @@ void print_start() {
   mvprintw(10, 0, " Press ENTER to START%*c", 59, ' ');
 }
 
-void print_stats() {
+void print_stats_ban() {
   mvprintw(5, 27, "LEVEL");
   mvprintw(8, 27, "SPEED");
   mvprintw(11, 27, "SCORE");
@@ -112,4 +112,21 @@ void print_game_over() {
   mvprintw(10, 0, "      GAME OVER!      ");
   mvprintw(11, 0, "%*c", 22, ' ');
   mvprintw(21, 24, "ENTER - restart");
+}
+
+void print_arr(int **arr) {
+  if (arr != NULL) {
+    size_t i = 0;
+    while (arr[i][0] != -1 && arr[i][1] != -1) {
+      mvprintw(arr[i][0] + 1, arr[i][1] * 2 + 1, "[]");
+      i++;
+    }
+  }
+}
+
+void print_stats(int level, int speed, int score, int high_score) {
+  mvprintw(6, 29, "%d", level);
+  mvprintw(9, 29, "%.2f", (float)500 / speed);
+  mvprintw(12, 29, "%d", score);
+  mvprintw(15, 29, "%d", high_score);
 }
