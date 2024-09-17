@@ -102,8 +102,7 @@ bool SnakeGame::collision(const Coordinate &pos) {
   if (pos.x < 0 || pos.x >= ROWS_BOARD || pos.y < 0 || pos.y >= COL_BOARD) {
     return true;
   }
-  /*проверить на столкновение с хвостом!*/
-  for (auto i = --(--snake.end()); i != snake.begin(); i--) {
+  for (auto i = --snake.end(); i != snake.begin(); i--) {
     if (pos.eq_coordinate(*i)) {
       return true;
     }
@@ -113,6 +112,11 @@ bool SnakeGame::collision(const Coordinate &pos) {
 
 void SnakeGame::move_snake() {
   Coordinate pos = snake_head_new_pos();
+  if (collision(pos)) {
+    // snake.pop_back();
+    // snake.push_front(pos);
+    state = End;
+  }
   snake.push_back(pos);
   if (pos.eq_coordinate(apple) == true) {
     s_score++;
@@ -123,11 +127,6 @@ void SnakeGame::move_snake() {
     }
   } else {
     snake.pop_front();
-  }
-  if (collision(pos)) {
-    snake.pop_back();
-    snake.push_front(pos);
-    state = End;
   }
 }
 

@@ -43,6 +43,7 @@ void Controller::free_array(int **arr) {
     delete[] arr[i];
     i++;
   }
+  delete[] arr[i];
   delete[] arr;
 }
 
