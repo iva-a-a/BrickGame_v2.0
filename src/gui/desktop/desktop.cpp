@@ -1,57 +1,72 @@
-#include "snake_desktop.h"
-#include <QApplication>
-// #include <QLabel>
+#include "desktop.h"
 
-// #include <QPushButton>
+#include <iomanip>
+#include <sstream>
+#include <string>
 
-// #include <QVBoxLayout>
-// #include <QWidget>
+void CommonDraw::setup_window() {
+  setFixedSize(SIZE_RECT * 10 + 200, SIZE_RECT * 20 + 10);
+  setFocusPolicy(Qt::StrongFocus);
+}
 
-// int main(int argc, char *argv[]) {
-//   QApplication app(argc, argv);
-//   // Создаем основное окно
-//   QWidget window;
-//   window.setWindowTitle("BRICK GAME V2.0");
+void CommonDraw::setup_painter(QPainter &p) {
+  QFont font;
+  font.setPointSize(14);
+  p.setFont(font);
+}
 
-//   // Создаем виджеты
-//   QLabel *label = new QLabel("Game:");
-//   QPushButton *b_quit = new QPushButton("Quit");
-//   QPushButton *b_snake = new QPushButton("Snake");
-//   QPushButton *b_tetris = new QPushButton("Tetris");
-//   // Устанавливаем соединение для кнопки
-//   QObject::connect(b_quit, &QPushButton::clicked, &app, &QApplication::quit);
+void CommonDraw::draw_arr(int **arr, QPainter &p) {
+  if (arr != nullptr) {
+    size_t i = 0;
+    while (arr[i][0] != -1 && arr[i][1] != -1) {
+      p.fillRect(arr[i][1] * SIZE_RECT, arr[i][0] * SIZE_RECT, SIZE_RECT,
+                 SIZE_RECT, QBrush(Qt::black));
+      i++;
+    }
+  }
+}
 
-//   QObject::connect(b_snake, &QPushButton::clicked, &app,
-//   &QApplication::quit); QObject::connect(b_tetris, &QPushButton::clicked,
-//   &app, &QApplication::quit);
+void CommonDraw::draw_board(QPainter &p) {
 
-//   // Создаем расположение и добавляем виджеты
-//   QVBoxLayout *layout = new QVBoxLayout;
-//   layout->addWidget(label);
+  for (int x = 0; x < SIZE_RECT * 10; x += SIZE_RECT) {
+    for (int y = 0; y < SIZE_RECT * 20; y += SIZE_RECT) {
+      p.drawRect(x, y, SIZE_RECT, SIZE_RECT);
+    }
+  }
+}
 
-//   layout->addWidget(b_snake);
-//   layout->addWidget(b_tetris);
-//   layout->addWidget(b_quit);
+void CommonDraw::draw_start(QPainter &p) {
+  p.drawText(rect(), Qt::AlignCenter, "Press ENTER to Start");
+}
 
-//   // Устанавливаем расположение в главное окно
-//   window.setLayout(layout);
+void CommonDraw::draw_pause(QPainter &p) {
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 12 + 25, "PAUSE");
+}
+void CommonDraw::draw_gameover(QPainter &p) {
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 12 + 25, "GAME OVER!");
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 19 + 25, "ENTER - restart");
+}
 
-//   // Отображаем главное окно
-//   window.resize(250, 100);
-//   window.show();
-//   // delete label;
-//   // delete b_quit;
-//   // delete b_snake;
-//   // delete b_tetris;
+void CommonDraw::draw_banner_stat(QPainter &p, int level, int speed, int score,
+                                  int h_score) {
 
-//   return app.exec();
-// }
+  std::string l = "Level: " + std::to_string(level);
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 4 + 25, l.data());
 
-int main(int argc, char *argv[]) {
-  QApplication app(argc, argv);
+  float speedSn = (float)500 / speed;
+  std::ostringstream oss;
+  oss << std::fixed << std::setprecision(2) << speedSn;
+  std::string sp = "Speed: " + oss.str();
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 5 + 25, sp.data());
 
-  s21::SnakeWidget window;
-  window.show();
+  std::string s = "Score: " + std::to_string(score);
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 6 + 25, s.data());
 
-  return app.exec();
+  std::string hs = "High score: " + std::to_string(h_score);
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 7 + 25, hs.data());
+
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 14 + 25, "     Press:");
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 15 + 25, "ESC - exit");
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 16 + 25, "BACKSPACE - pause");
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 17 + 25, "ARROWS - move");
 }

@@ -1,6 +1,10 @@
 #ifndef BACK_TETRIS_H
 #define BACK_TETRIS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdbool.h>
 
 #include "../defines.h"
@@ -154,5 +158,9 @@ int **join_matrix(int **arr1, int **arr2);
 void free_matrix(int **arr);
 
 void free_gameinfo(GameInfo_t *info);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

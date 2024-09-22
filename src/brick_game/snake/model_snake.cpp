@@ -113,20 +113,19 @@ bool SnakeGame::collision(const Coordinate &pos) {
 void SnakeGame::move_snake() {
   Coordinate pos = snake_head_new_pos();
   if (collision(pos)) {
-    // snake.pop_back();
-    // snake.push_front(pos);
     state = End;
-  }
-  snake.push_back(pos);
-  if (pos.eq_coordinate(apple) == true) {
-    s_score++;
-    if (s_score == SCORE_WIN) {
-      state = End;
-    } else {
-      state = Attaching;
-    }
   } else {
-    snake.pop_front();
+    snake.push_back(pos);
+    if (pos.eq_coordinate(apple) == true) {
+      s_score++;
+      if (s_score == SCORE_WIN) {
+        state = End;
+      } else {
+        state = Attaching;
+      }
+    } else {
+      snake.pop_front();
+    }
   }
 }
 
@@ -141,14 +140,19 @@ void SnakeGame::check_move_snake() {
 }
 
 void SnakeGame::change_direction(UserAction_t currentAction) {
-  if (currentAction == Down && dir != Direction::Up) {
+  Direction prev_dir = dir;
+  if (currentAction == Down) {
     dir = Direction::Down;
-  } else if (currentAction == Up && dir != Direction::Down) {
+  } else if (currentAction == Up) {
     dir = Direction::Up;
-  } else if (currentAction == Left && dir != Direction::Right) {
+  } else if (currentAction == Left) {
     dir = Direction::Left;
-  } else if (currentAction == Right && dir != Direction::Left) {
+  } else if (currentAction == Right) {
     dir = Direction::Right;
+  }
+  Coordinate pos = *(--(--snake.end()));
+  if (pos.eq_coordinate(snake_head_new_pos())) {
+    dir = prev_dir;
   }
 }
 

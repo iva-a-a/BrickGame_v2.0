@@ -1,5 +1,5 @@
 CPP = g++
-CPPFLAGS = -Wall -Werror -Wextra -std=c++17
+CPPFLAGS = -g -Wall -Werror -Wextra -std=c++17
 #TESTFLAGS = -lgtest -lsubunit -pthread
 LDLIBS = 
 
@@ -28,7 +28,7 @@ GAME_VERSION = 2.0
 
 ALL_SRC = $(wildcard   */*/*.c */*/*/*.c */*/*.cpp */*/*/*.cpp */*.h */*/*.h */*/*/*.h)
 
-.PHONY: all $(GAME) $(LIBRARY_TET) $(LIBRARY_SN) clean
+.PHONY: all $(GAME) $(LIBRARY_TET) $(LIBRARY_SN) clean desktop
 
 %.o: %.c
 	$(CPP) $(CPPFLAGS) -c -o $@ $<
@@ -53,3 +53,11 @@ clean:
 	rm -f $(GAME) $(LIBDIR_TET)/*.o $(GUIDIR_TET)/*.o  $(GUIDIR)/*.o $(LIBDIR_SN)/*.o  $(GUIDIR_SN)/*.o *.a
 	rm -f *.txt *.gz
 	rm -rf doxygen
+
+desktop:
+	rm -rf desk
+	mkdir desk
+	cd desk && qmake ../gui/desktop
+	cd desk && make
+	mv desk/game .
+	rm -rf desk
