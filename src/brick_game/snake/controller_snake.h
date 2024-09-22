@@ -5,9 +5,11 @@
 namespace s21 {
 
 class Controller {
+private:
+  SnakeGame model;
+
 public:
-  SnakeGame *model;
-  Controller(SnakeGame *model);
+  Controller() = default;
   ~Controller() = default;
 
   int **convert_snake_to_array(std::list<Coordinate> snake);
@@ -17,5 +19,7 @@ public:
   void userInput(UserAction_t currentAction, bool hold);
   GameInfo_t updateCurrentState();
   void clearGameInfo(GameInfo_t &info_snake);
+
+  SnakeGame *get_model();
 };
 } // namespace s21

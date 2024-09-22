@@ -10,7 +10,7 @@ using namespace s21;
   }
 
 SnakeWidget::SnakeWidget(QMainWindow *window)
-    : CommonDraw(window), model{}, controller{&model} {
+    : CommonDraw(window), controller{} {
 
   QMainWindow::setWindowTitle("Snake");
   setup_window();
@@ -31,7 +31,7 @@ void SnakeWidget::paintEvent(QPaintEvent *event) {
   setup_painter(p);
 
   GameInfo_t info = controller.updateCurrentState();
-  GameState_t state = controller.model->get_state();
+  GameState_t state = controller.get_model()->get_state();
   if (state != Begin) {
     draw_board(p);
     draw_arr(info.field, p);
@@ -52,7 +52,7 @@ void SnakeWidget::paintEvent(QPaintEvent *event) {
 }
 
 void SnakeWidget::keyPressEvent(QKeyEvent *key) {
-  UserAction_t prev_key = controller.model->get_currAction();
+  UserAction_t prev_key = controller.get_model()->get_currAction();
   UserAction_t act = None;
   if (key->key() == Qt::Key_Down) {
     act = Down;
@@ -71,6 +71,7 @@ void SnakeWidget::keyPressEvent(QKeyEvent *key) {
   } else {
     act = Action;
   }
+
   controller.userInput(act, act == prev_key && act != None);
   update_display();
   if (act == Terminate) {

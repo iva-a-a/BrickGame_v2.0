@@ -22,7 +22,6 @@ protected:
   void paintEvent(QPaintEvent *event) override;
 
 private:
-  s21::SnakeGame model;
   s21::Controller controller;
   QTimer *timer;
 
