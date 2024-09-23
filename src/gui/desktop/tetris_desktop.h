@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../../brick_game/snake/controller_snake.h"
+#include "../../brick_game/tetris/controller_tetris.h"
 #include "desktop.h"
-//#include "main_window.h"
 #include <QGraphicsView>
 #include <QKeyEvent>
 
@@ -10,23 +9,20 @@
 
 namespace s21 {
 
-class SnakeWidget : public CommonDraw {
+class TetrisWidget : public CommonDraw {
   Q_OBJECT
 public:
-  explicit SnakeWidget(QWidget *window = nullptr);
-  ~SnakeWidget();
+  explicit TetrisWidget(QWidget *window = nullptr);
+  ~TetrisWidget();
 
-  void draw_win(QPainter &p);
+  void draw_stat_tetris(QPainter &p);
 
 protected:
   void keyPressEvent(QKeyEvent *key) override;
   void paintEvent(QPaintEvent *event) override;
 
 private:
-  s21::Controller controller;
   QTimer *timer;
-
-  // MainWindow *main_window;
 
 private slots:
   void update_display();
