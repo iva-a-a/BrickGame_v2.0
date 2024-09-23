@@ -9,10 +9,9 @@ using namespace s21;
     printf("\n");                                                              \
   }
 
-SnakeWidget::SnakeWidget(QMainWindow *window)
-    : CommonDraw(window), controller{} {
+SnakeWidget::SnakeWidget(QWidget *window) : CommonDraw(window), controller{} {
 
-  QMainWindow::setWindowTitle("Snake");
+  QWidget::setWindowTitle("Snake");
   setup_window();
   timer = new QTimer();
   connect(timer, &QTimer::timeout, this, &SnakeWidget::update_display);
@@ -76,12 +75,10 @@ void SnakeWidget::keyPressEvent(QKeyEvent *key) {
   update_display();
   if (act == Terminate) {
     if (key->key() == Qt::Key_Escape) {
-      // QWidget::close();
+      // this->close();
+      // main_window->show();
     }
   }
 }
 
-void SnakeWidget::update_display() {
-  // repaint();
-  update();
-}
+void SnakeWidget::update_display() { update(); }
