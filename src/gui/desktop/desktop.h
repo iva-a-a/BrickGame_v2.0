@@ -1,14 +1,14 @@
 #pragma once
 
-#include <QMainWindow>
 #include <QPainter>
+#include <QWidget>
 
 #define SIZE_RECT 30
-
-class CommonDraw : public QMainWindow {
+namespace s21 {
+class CommonDraw : public QWidget {
 
 public:
-  explicit CommonDraw(QMainWindow *window) : QMainWindow{window} {};
+  explicit CommonDraw(QWidget *window) : QWidget{window} {};
   ~CommonDraw() = default;
 
   void setup_window();
@@ -24,3 +24,4 @@ public:
   void draw_banner_stat(QPainter &p, int level, int speed, int score,
                         int h_score);
 };
+} // namespace s21
