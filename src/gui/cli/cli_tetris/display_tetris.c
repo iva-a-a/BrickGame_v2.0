@@ -8,7 +8,7 @@ void print_stats_tetris() {
 void clear_next_figure() {
   for (int i = 0; i < ROWS_FIGURE - 1; i++) {
     for (int j = 0; j < COL_FIGURE; j++) {
-      mvprintw(2 + i, 26 + j * 2 + 1, "  ");
+      mvprintw(2 + i, 24 + j * 2 + 1, "  ");
     }
   }
 }
@@ -42,7 +42,7 @@ void game_tetris() {
     info->pause = (int)tetris.state;
     userInput(input_key(), false);
     tetris.state = (GameState_t)info->pause;
-    update(&tetris);
+    update_game(&tetris);
     GameInfo_t info_tetris = updateCurrentState();
     printCurrentState(&info_tetris);
     free_gameinfo(&info_tetris);

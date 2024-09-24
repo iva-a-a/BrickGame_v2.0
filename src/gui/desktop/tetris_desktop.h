@@ -1,10 +1,9 @@
 #pragma once
 
+#include "../../brick_game/tetris/back_tetris.h"
 #include "../../brick_game/tetris/controller_tetris.h"
 #include "desktop.h"
-#include <QGraphicsView>
 #include <QKeyEvent>
-
 #include <QTimer>
 
 namespace s21 {
@@ -12,7 +11,7 @@ namespace s21 {
 class TetrisWidget : public CommonDraw {
   Q_OBJECT
 public:
-  explicit TetrisWidget(QWidget *window = nullptr);
+  explicit TetrisWidget(QMainWindow *parent);
   ~TetrisWidget();
 
   void draw_stat_tetris(QPainter &p);
@@ -23,6 +22,7 @@ protected:
 
 private:
   QTimer *timer;
+  Game_tetris _game;
 
 private slots:
   void update_display();

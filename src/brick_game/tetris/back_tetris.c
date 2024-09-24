@@ -263,7 +263,7 @@ void clear_mat(int **matrix, int x, int y) {
   }
 }
 
-void update(Game_tetris *tetris) {
+void update_game(Game_tetris *tetris) {
   if (tetris->state == Begin) {
     clearing_game(tetris);
   } else if (tetris->state == Generation) {
@@ -302,15 +302,16 @@ void update(Game_tetris *tetris) {
   GameInfo_t *info = get_GameInfo();
   if (info) {
     info->field = convert_matrix(tetris->field, ROWS_BOARD, COL_BOARD, 0, 0);
-    int **t_next = convert_matrix(tetris->next, ROWS_FIGURE, COL_FIGURE, 1, 13);
+    int **t_next = convert_matrix(tetris->next, ROWS_FIGURE, COL_FIGURE, 1, 12);
     int **t_now = convert_matrix(tetris->now, ROWS_FIGURE, COL_FIGURE,
                                  tetris->y, tetris->x);
     info->next = join_matrix(t_next, t_now);
+
+    info->score = tetris->score;
+    info->high_score = tetris->high_score;
+    info->level = tetris->level;
+    info->speed = tetris->speed;
   }
-  info->score = tetris->score;
-  info->high_score = tetris->high_score;
-  info->level = tetris->level;
-  info->speed = tetris->speed;
 }
 
 int **convert_matrix(int **arr1, int row, int col, int x, int y) {

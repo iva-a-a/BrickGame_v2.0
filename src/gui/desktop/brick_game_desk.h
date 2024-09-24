@@ -1,4 +1,6 @@
 #pragma once
 
-#include "snake_desktop.h"
+#include "main_window.h"
+// #include "snake_desktop.h"
+// #include "tetris_desktop.h"
 #include <QApplication>

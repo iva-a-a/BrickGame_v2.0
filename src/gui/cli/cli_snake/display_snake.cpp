@@ -11,8 +11,8 @@ void SnakeDisplay::print_win() {
 }
 
 void SnakeDisplay::game_snake() {
-  while (controller->model->get_state() != Exit) {
-    UserAction_t prev_key = controller->model->get_currAction();
+  while (controller->get_model()->get_state() != Exit) {
+    UserAction_t prev_key = controller->get_model()->get_currAction();
     UserAction_t key = input_key();
     controller->userInput(key, prev_key == key && key != None);
     GameInfo_t info = controller->updateCurrentState();
@@ -22,7 +22,7 @@ void SnakeDisplay::game_snake() {
 }
 
 void SnakeDisplay::printCurrentState(GameInfo_t &info) {
-  GameState_t state = controller->model->get_state();
+  GameState_t state = controller->get_model()->get_state();
   if (state == Begin) {
     print_start();
   } else if (state == End) {

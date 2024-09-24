@@ -151,7 +151,7 @@ void clear_mat(int **matrix, int x, int y);
 
 void clearing_game(Game_tetris *tetris);
 
-void update(Game_tetris *tetris);
+void update_game(Game_tetris *tetris);
 
 int **convert_matrix(int **arr1, int row, int col, int x, int y);
 int **join_matrix(int **arr1, int **arr2);

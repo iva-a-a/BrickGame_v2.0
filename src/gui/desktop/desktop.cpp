@@ -17,12 +17,12 @@ void CommonDraw::setup_painter(QPainter &p) {
   p.setFont(font);
 }
 
-void CommonDraw::draw_arr(int **arr, QPainter &p) {
+void CommonDraw::draw_arr(int **arr, QPainter &p, const QColor &color) {
   if (arr != nullptr) {
     size_t i = 0;
     while (arr[i][0] != -1 && arr[i][1] != -1) {
       p.fillRect(arr[i][1] * SIZE_RECT, arr[i][0] * SIZE_RECT, SIZE_RECT,
-                 SIZE_RECT, QBrush(Qt::black));
+                 SIZE_RECT, QBrush(color));
       i++;
     }
   }
@@ -42,10 +42,10 @@ void CommonDraw::draw_start(QPainter &p) {
 }
 
 void CommonDraw::draw_pause(QPainter &p) {
-  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 12 + 25, "PAUSE");
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 10 + 25, "PAUSE");
 }
 void CommonDraw::draw_gameover(QPainter &p) {
-  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 12 + 25, "GAME OVER!");
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 10 + 25, "GAME OVER!");
   p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 19 + 25, "ENTER - restart");
 }
 

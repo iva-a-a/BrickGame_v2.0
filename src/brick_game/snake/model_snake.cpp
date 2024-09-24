@@ -51,11 +51,11 @@ void SnakeGame::clearing_game() {
 
 /*генерируем рандомное положение яблока*/
 void SnakeGame::put_apple() {
-  int x, y;
+
   bool apple_on_snake;
   do {
-    x = rand() % ROWS_BOARD;
-    y = rand() % COL_BOARD;
+    int x = rand() % ROWS_BOARD;
+    int y = rand() % COL_BOARD;
     apple = {x, y};
     apple_on_snake = false;
     for (const auto &i : snake) {

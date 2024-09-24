@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QMainWindow>
 #include <QPainter>
 #include <QWidget>
 
@@ -8,13 +9,13 @@ namespace s21 {
 class CommonDraw : public QWidget {
 
 public:
-  explicit CommonDraw(QWidget *window) : QWidget{window} {};
+  explicit CommonDraw(QMainWindow *w) : parent{w} {};
   ~CommonDraw() = default;
 
   void setup_window();
   void setup_painter(QPainter &p);
 
-  void draw_arr(int **arr, QPainter &p);
+  void draw_arr(int **arr, QPainter &p, const QColor &color);
 
   void draw_board(QPainter &p);
   void draw_start(QPainter &p);
@@ -23,5 +24,8 @@ public:
 
   void draw_banner_stat(QPainter &p, int level, int speed, int score,
                         int h_score);
+
+protected:
+  QMainWindow *parent;
 };
 } // namespace s21

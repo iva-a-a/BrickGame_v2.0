@@ -3,7 +3,7 @@
 int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
 
-  s21::SnakeWidget window;
+  s21::MainWindow window;
   window.show();
 
   return app.exec();

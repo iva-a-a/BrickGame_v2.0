@@ -9,7 +9,7 @@ private:
   Controller *controller;
 
 public:
-  SnakeDisplay(Controller *c);
+  explicit SnakeDisplay(Controller *c);
   ~SnakeDisplay() = default;
 
   void print_win();

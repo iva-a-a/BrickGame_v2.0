@@ -2,14 +2,8 @@
 
 using namespace s21;
 
-#define LOG(...)                                                               \
-  {                                                                            \
-    printf(__VA_ARGS__);                                                       \
-    fflush(stdout);                                                            \
-    printf("\n");                                                              \
-  }
-
-SnakeWidget::SnakeWidget(QWidget *window) : CommonDraw(window), controller{} {
+SnakeWidget::SnakeWidget(QMainWindow *parent)
+    : CommonDraw(parent), controller{} {
 
   QWidget::setWindowTitle("Snake");
   setup_window();
@@ -21,7 +15,7 @@ SnakeWidget::SnakeWidget(QWidget *window) : CommonDraw(window), controller{} {
 SnakeWidget::~SnakeWidget() { delete timer; }
 
 void SnakeWidget::draw_win(QPainter &p) {
-  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 12 + 25, "YOU WIN!");
+  p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 10 + 25, "YOU WIN!");
 }
 
 void SnakeWidget::paintEvent(QPaintEvent *event) {
@@ -33,8 +27,8 @@ void SnakeWidget::paintEvent(QPaintEvent *event) {
   GameState_t state = controller.get_model()->get_state();
   if (state != Begin) {
     draw_board(p);
-    draw_arr(info.field, p);
-    draw_arr(info.next, p);
+    draw_arr(info.field, p, Qt::red);
+    draw_arr(info.next, p, Qt::black);
     draw_banner_stat(p, info.level, info.speed, info.score, info.high_score);
   }
   if (state == Begin) {
@@ -70,14 +64,11 @@ void SnakeWidget::keyPressEvent(QKeyEvent *key) {
   } else {
     act = Action;
   }
-
   controller.userInput(act, act == prev_key && act != None);
   update_display();
-  if (act == Terminate) {
-    if (key->key() == Qt::Key_Escape) {
-      // this->close();
-      // main_window->show();
-    }
+  if (controller.get_model()->get_state() == Exit) {
+    this->close();
+    parent->show();
   }
 }
 

@@ -20,6 +20,8 @@ INCLUDEPATH += .
 HEADERS += brick_game_desk.h \
            desktop.h \
            snake_desktop.h \
+           tetris_desktop.h \
+           main_window.h \
            ../../brick_game/defines.h \
            ../../brick_game/struct.h \
            ../../brick_game/snake/controller_snake.h \
@@ -30,6 +32,8 @@ HEADERS += brick_game_desk.h \
 SOURCES += brick_game_desk.cpp \
            desktop.cpp \
            snake_desktop.cpp \
+           tetris_desktop.cpp \
+           main_window.cpp \
            ../../brick_game/snake/controller_snake.cpp \
            ../../brick_game/snake/model_snake.cpp \
            ../../brick_game/tetris/back_tetris.c \
