@@ -13,7 +13,8 @@ extern "C" {
 /**
  * @brief получение состояния игры
  *
- * @return возвращает структуру, содержащую информацию о текущем состоянии игры
+ * @return возвращает указатель на структуру, содержащую информацию о текущем
+ * состоянии игры
  */
 
 GameInfo_t *get_GameInfo();
@@ -27,21 +28,27 @@ long long int time_in_millisec();
 
 /**
  * @brief иницилизация игры
+ *
+ * @param tetris состояние игры
  */
 void setup_game(Game_tetris *tetris);
 
 /**
  * @brief начальное состояние игры
+ *
+ * @param tetris состояние игры
  */
 void initial_info(Game_tetris *tetris);
 
 /**
  * @brief очистка состояние игры
+ *
+ * @param tetris состояние игры
  */
 void free_info(Game_tetris *tetris);
 
 /**
- * @brief рандомноя фигура
+ * @brief генерация рандомной фигуры
  *
  * @param tetris состояние игры
  */
@@ -67,7 +74,7 @@ void filling_field(Game_tetris *tetris);
 int remove_row(Game_tetris *tetris);
 
 /**
- * @brief падение фигруры
+ * @brief падение фигуры
  *
  * @param tetris состояние игры
  */
@@ -147,16 +154,54 @@ void clear_mat(int **matrix, int x, int y);
 
 /**
  * @brief очистка состояния игры
+ *
+ * @param tetris состояние игры
  */
 
 void clearing_game(Game_tetris *tetris);
 
+/**
+ * @brief обновление состояния игры
+ *
+ * @param tetris состояние игры
+ */
 void update_game(Game_tetris *tetris);
 
+/**
+ * @brief конвертирует матрицы, путем извлечения координат всех единиц из
+ * входной матрицы и сдвиг их на заданные значения x и y
+ *
+ *@param arr1 указатель на входную матрицу
+ *
+ * @param row количество строк в матрице
+ * @param col количество столбцов в матрице
+ * @param x значение, на которое будет сдвинута строка (горизонтально)
+ * @param y Значение, на которое будет сдвинута колонка (вертикально)
+ *
+ * @return указатель на новую матрицу
+ */
 int **convert_matrix(int **arr1, int row, int col, int x, int y);
+
+/**
+ * @brief соединение двух матриц
+ *
+ * @param arr1 массив указателей на строки матрицы 1
+ * @param arr2 массив указателей на строки матрицы 2
+ */
 int **join_matrix(int **arr1, int **arr2);
+
+/**
+ * @brief очистка памяти под матрицу
+ *
+ * @param arr массив указателей на строки матрицы
+ */
 void free_matrix(int **arr);
 
+/**
+ * @brief очистка памяти для информации о текущем состоянии игры
+ *
+ * @param info указатель на структуру, содержащую информацию о текущем
+ */
 void free_gameinfo(GameInfo_t *info);
 
 #ifdef __cplusplus

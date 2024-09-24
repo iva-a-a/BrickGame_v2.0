@@ -14,39 +14,38 @@ UserAction_t input_key() {
   UserAction_t return_key;
   int key = getch(); /*считываем клавишу с клавиатуры*/
   switch (key) {
-  case KEY_DOWN:
-    return_key = Down;
-    break;
-  case KEY_LEFT:
-    return_key = Left;
-    break;
-  case KEY_RIGHT:
-    return_key = Right;
-    break;
-  case 10: /*enter - начало игры*/
-    return_key = Start;
-    break;
-  case 263: /*backspace - пауза*/
-    return_key = Pause;
-    break;
-  case 27: /*esc - завершение игры*/
-    return_key = Terminate;
-    break;
-  case 32: /*пробел - движение (поворот фигуры)*/
-    return_key = Action;
-    break;
-  case KEY_UP: /*пробел - движение (поворот фигуры)*/
-    return_key = Up;
-    break;
-  default:
-    return_key = None;
-    break;
+    case KEY_DOWN:
+      return_key = Down;
+      break;
+    case KEY_LEFT:
+      return_key = Left;
+      break;
+    case KEY_RIGHT:
+      return_key = Right;
+      break;
+    case 10: /*enter - начало игры*/
+      return_key = Start;
+      break;
+    case 263: /*backspace - пауза*/
+      return_key = Pause;
+      break;
+    case 27: /*esc - завершение игры*/
+      return_key = Terminate;
+      break;
+    case 32: /*пробел - движение (поворот фигуры)*/
+      return_key = Action;
+      break;
+    case KEY_UP: /*пробел - движение (поворот фигуры)*/
+      return_key = Up;
+      break;
+    default:
+      return_key = None;
+      break;
   }
   return return_key;
 }
 
 void print_game_setection() {
-
   mvprintw(1, 7, "BRICK_GAME v2.0");
   mvprintw(3, 1, "TETRIS - press \'T\' or \'t\' to START");
   mvprintw(4, 1, "SNAKE  - press \'S\' or \'s\' to START");

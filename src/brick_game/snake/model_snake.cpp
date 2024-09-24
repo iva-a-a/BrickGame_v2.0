@@ -36,7 +36,6 @@ int SnakeGame::get_level() { return this->s_level; }
 int SnakeGame::get_speed() { return this->s_speed; }
 
 void SnakeGame::clearing_game() {
-
   s_score = 0;
   s_level = 1;
   s_speed = 500;
@@ -51,7 +50,6 @@ void SnakeGame::clearing_game() {
 
 /*генерируем рандомное положение яблока*/
 void SnakeGame::put_apple() {
-
   bool apple_on_snake;
   do {
     int x = rand() % ROWS_BOARD;
@@ -82,17 +80,17 @@ GameState_t SnakeGame::get_state() const { return this->state; }
 Coordinate SnakeGame::snake_head_new_pos() {
   Coordinate pos = snake.back();
   switch (dir) {
-  case Direction::Up:
-    pos.x--;
-    break;
-  case Direction::Down:
-    pos.x++;
-    break;
-  case Direction::Left:
-    pos.y--;
-    break;
-  case Direction::Right:
-    pos.y++;
+    case Direction::Up:
+      pos.x--;
+      break;
+    case Direction::Down:
+      pos.x++;
+      break;
+    case Direction::Left:
+      pos.y--;
+      break;
+    case Direction::Right:
+      pos.y++;
   }
   return pos;
 }

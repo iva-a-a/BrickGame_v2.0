@@ -1,5 +1,10 @@
 #include "brick_game_cli.h"
 
+/**
+ * @brief основная функция программы терминального интерфейса
+ * @return 0 при успешном завершении
+ */
+
 int main() {
   setup_gui();
   int key = getch();

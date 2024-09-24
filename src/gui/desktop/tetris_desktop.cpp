@@ -1,14 +1,6 @@
 #include "tetris_desktop.h"
 
 using namespace s21;
-
-#define LOG(...)                                                               \
-  {                                                                            \
-    printf(__VA_ARGS__);                                                       \
-    fflush(stdout);                                                            \
-    printf("\n");                                                              \
-  }
-
 TetrisWidget::TetrisWidget(QMainWindow *parent) : CommonDraw(parent) {
   setup_game(&_game);
   QWidget::setWindowTitle("Tetris");
@@ -56,7 +48,6 @@ void TetrisWidget::keyPressEvent(QKeyEvent *key) {
 }
 
 void TetrisWidget::paintEvent(QPaintEvent *event) {
-
   Q_UNUSED(event)
   QPainter p(this);
   setup_painter(p);

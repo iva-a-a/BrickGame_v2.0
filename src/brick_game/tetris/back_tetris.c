@@ -50,7 +50,6 @@ void initial_info(Game_tetris *tetris) {
 }
 
 void free_info(Game_tetris *tetris) {
-
   if (tetris->field) {
     for (int i = 0; i < ROWS_BOARD; i++) {
       free(tetris->field[i]);

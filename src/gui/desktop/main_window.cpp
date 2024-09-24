@@ -7,7 +7,6 @@ MainWindow::MainWindow() { setup_ui(); }
 MainWindow::~MainWindow() { delete_game(); }
 
 void MainWindow::setup_ui() {
-
   setFixedSize(300, 100);
   QMainWindow::setWindowTitle("BRICK GAME V2.0");
   QWidget *centralWidget = new QWidget(this);

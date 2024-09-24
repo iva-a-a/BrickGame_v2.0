@@ -29,7 +29,6 @@ void CommonDraw::draw_arr(int **arr, QPainter &p, const QColor &color) {
 }
 
 void CommonDraw::draw_board(QPainter &p) {
-
   for (int x = 0; x < SIZE_RECT * 10; x += SIZE_RECT) {
     for (int y = 0; y < SIZE_RECT * 20; y += SIZE_RECT) {
       p.drawRect(x, y, SIZE_RECT, SIZE_RECT);
@@ -51,7 +50,6 @@ void CommonDraw::draw_gameover(QPainter &p) {
 
 void CommonDraw::draw_banner_stat(QPainter &p, int level, int speed, int score,
                                   int h_score) {
-
   std::string l = "Level: " + std::to_string(level);
   p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 4 + 25, l.data());
 
