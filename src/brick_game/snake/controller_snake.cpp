@@ -33,16 +33,15 @@ int **Controller::convert_apple_to_array(Coordinate apple) {
 }
 
 void Controller::free_array(int **arr) {
-  if (arr == nullptr) {
-    return;
-  }
-  size_t i = 0;
-  while (arr[i][0] != -1 && arr[i][1] != -1) {
+  if (arr != nullptr) {
+    size_t i = 0;
+    while (arr[i][0] != -1 && arr[i][1] != -1) {
+      delete[] arr[i];
+      i++;
+    }
     delete[] arr[i];
-    i++;
+    delete[] arr;
   }
-  delete[] arr[i];
-  delete[] arr;
 }
 
 void Controller::userInput(UserAction_t currentAction, bool hold) {
