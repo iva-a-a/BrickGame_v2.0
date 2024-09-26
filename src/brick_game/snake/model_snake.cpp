@@ -1,19 +1,49 @@
 #include "model_snake.h"
 
-#include <fstream>
-
+#include <algorithm>
 using namespace s21;
 
-UserAction_t SnakeGame::get_currAction() { return currentAction; }
+SnakeGame::SnakeGame() {
+  srand(time(NULL));
+  initial_info();
+}
+
+void SnakeGame::set_state(GameState_t state) { this->state = state; }
+
 void SnakeGame::set_currAction(UserAction_t action) {
   this->currentAction = action;
 }
 
-std::list<Coordinate> &SnakeGame::get_snake() { return snake; }
-
 void SnakeGame::set_prev_time(long long int time) { prev_time = time; }
 
+GameState_t SnakeGame::get_state() const { return this->state; }
+
+UserAction_t SnakeGame::get_currAction() { return currentAction; }
+
+std::list<Coordinate> &SnakeGame::get_snake() { return snake; }
+
 Coordinate SnakeGame::get_apple() { return apple; }
+
+int SnakeGame::get_score() { return this->s_score; }
+
+int SnakeGame::get_high_score() { return this->s_high_score; }
+
+int SnakeGame::get_level() { return this->s_level; }
+
+int SnakeGame::get_speed() { return this->s_speed; }
+
+void SnakeGame::clearing_game() {
+  s_score = 0;
+  s_level = 1;
+  s_speed = 500;
+  prev_time = 0;
+
+  currentAction = None;
+  state = Begin;
+  dir = Direction::Up;
+  put_apple();
+  create_snake();
+}
 
 void SnakeGame::initial_info() {
   std::ifstream inputFile("highscore_snake.txt");
@@ -30,53 +60,20 @@ void SnakeGame::initial_info() {
   clearing_game();
 }
 
-int SnakeGame::get_score() { return this->s_score; }
-int SnakeGame::get_high_score() { return this->s_high_score; }
-int SnakeGame::get_level() { return this->s_level; }
-int SnakeGame::get_speed() { return this->s_speed; }
-
-void SnakeGame::clearing_game() {
-  s_score = 0;
-  s_level = 1;
-  s_speed = 500;
-  prev_time = 0;
-
-  currentAction = None;
-  state = Begin;
-  dir = Direction::Up;
-  put_apple();
-  create_snake();
-}
-
-/*генерируем рандомное положение яблока*/
 void SnakeGame::put_apple() {
   bool apple_on_snake;
   do {
     int x = rand() % ROWS_BOARD;
     int y = rand() % COL_BOARD;
     apple = {x, y};
-    apple_on_snake = false;
-    for (const auto &i : snake) {
-      if (apple.eq_coordinate(i)) {
-        apple_on_snake = true;
-      }
-    }
-  } while (apple_on_snake);
+    apple_on_snake =
+        std::none_of(snake.begin(), snake.end(),
+                     [this](const auto &i) { return apple.eq_coordinate(i); });
+  } while (!apple_on_snake);
 }
 
 void SnakeGame::create_snake() { snake = {{18, 5}, {17, 5}, {16, 5}, {15, 5}}; }
 
-/*конструктор по умолчанию - иницилизация игры*/
-SnakeGame::SnakeGame() {
-  srand(time(NULL));
-  initial_info();
-}
-
-void SnakeGame::set_state(GameState_t state) { this->state = state; }
-
-GameState_t SnakeGame::get_state() const { return this->state; }
-
-/*получаем новое положение головы в зависимости от направления движения*/
 Coordinate SnakeGame::snake_head_new_pos() {
   Coordinate pos = snake.back();
   switch (dir) {
@@ -95,7 +92,6 @@ Coordinate SnakeGame::snake_head_new_pos() {
   return pos;
 }
 
-/*проверка на столкновение*/
 bool SnakeGame::collision(const Coordinate &pos) {
   if (pos.x < 0 || pos.x >= ROWS_BOARD || pos.y < 0 || pos.y >= COL_BOARD) {
     return true;
@@ -106,6 +102,15 @@ bool SnakeGame::collision(const Coordinate &pos) {
     }
   }
   return false;
+}
+
+void SnakeGame::check_move_snake() {
+  long long int time = time_in_millisec();
+
+  if (time - prev_time > s_speed) {
+    move_snake();
+    prev_time = time;
+  }
 }
 
 void SnakeGame::move_snake() {
@@ -124,16 +129,6 @@ void SnakeGame::move_snake() {
     } else {
       snake.pop_front();
     }
-  }
-}
-
-/*движение змейки*/
-void SnakeGame::check_move_snake() {
-  long long int time = time_in_millisec();
-
-  if (time - prev_time > s_speed) {
-    move_snake();
-    prev_time = time;
   }
 }
 

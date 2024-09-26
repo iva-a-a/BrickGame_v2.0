@@ -1,9 +1,11 @@
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
 #include <iostream>
 #include <list>
 
-#include "../tetris/back_tetris.h"
+#include "../defines.h"
+#include "../struct.h"
 
 namespace s21 {
 
@@ -33,6 +35,12 @@ struct Coordinate {
   bool eq_coordinate(const Coordinate &a) const {
     return (x == a.x && y == a.y);
   }
+  /**
+   * @brief перегрузка оператора ==
+   * @param a координата для сравнения
+   * @return true, если координаты равны, иначе false
+   */
+  bool operator==(const Coordinate &a) const { return eq_coordinate(a); }
 };
 
 /**
@@ -41,18 +49,19 @@ struct Coordinate {
  */
 class SnakeGame {
  private:
-  std::list<Coordinate> snake; /**< список координат змейки */
-  Coordinate apple;            /**< Координаты яблока */
   Direction dir;     /**< направление движения змейки*/
   GameState_t state; /**< состояние игры */
   UserAction_t currentAction; /**< текущее действие игрока */
   long long int prev_time; /**< предыдущее время падения фигуры */
 
-  int s_score;      /**< количество очков */
   int s_high_score; /**< количество рекордных очков */
   int s_level;      /**< номер уровня */
   int s_speed;      /**< скорость движения змейки */
 
+ protected:
+  std::list<Coordinate> snake; /**< список координат змейки */
+  int s_score;                 /**< количество очков */
+  Coordinate apple;            /**< Координаты яблока */
  public:
   /**
    * @brief конструктор класса SnakeGame
@@ -78,6 +87,12 @@ class SnakeGame {
    * @param time новое значение времени
    */
   void set_prev_time(long long int time);
+
+  // /**
+  //  * @brief установка количества очков (для тестирования)
+  //  * @param score новое значение очков
+  //  */
+  // void set_score(int score);
 
   /**
    * @brief получение текущего состояние игры
@@ -110,7 +125,7 @@ class SnakeGame {
    */
   int get_high_score();
   /**
-   * @brief получение уровеня игры
+   * @brief получение уровня игры
    * @return уровень игры
    */
   int get_level();
@@ -162,7 +177,7 @@ class SnakeGame {
    */
   void change_direction(UserAction_t currentAction);
   /**
-   * @brief повышение уровеня игры
+   * @brief повышение уровня игры
    */
   void increase_level();
   /**
