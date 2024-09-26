@@ -1,6 +1,8 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
+#include <sys/time.h>
+#include <time.h>
 /**
  * @enum UserAction_t
  * @brief пользовательское действие
@@ -109,4 +111,14 @@ typedef struct {
   GameState_t state;
 } Game_tetris;
 
+/**
+ * @brief получение времени в миллисекундах
+ *
+ * @return возвращает время в миллисекундах
+ */
+inline long long int time_in_millisec() {
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  return (((long long int)tv.tv_sec) * 1000) + (tv.tv_usec / 1000);
+}
 #endif
