@@ -8,7 +8,7 @@ class TestSnake : public s21::SnakeGame {
   ~TestSnake() = default;
   void set_score(int score) { s_score = score; }
   void set_apple(s21::Coordinate a) { apple = a; }
-  void set_snake(std::list<s21::Coordinate> s) { snake = s; }
+  void set_snake(const std::list<s21::Coordinate> &s) { snake = s; }
 };
 
 TEST(ModelSnakeGameTest, StateActionSetGet) {

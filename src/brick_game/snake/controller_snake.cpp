@@ -51,7 +51,7 @@ void Controller::userInput(UserAction_t currentAction, bool hold) {
     if (currentAction == Pause) {
       model.set_state(Break);
     } else if (currentAction == Left || currentAction == Right ||
-               currentAction == Down || currentAction == Up) {
+               currentAction == Up || currentAction == Down) {
       model.set_state(Moving_rotate);
       model.set_currAction(currentAction);
     } else if (currentAction == Terminate) {
@@ -83,6 +83,7 @@ GameInfo_t Controller::updateCurrentState() {
   info_snake.high_score = model.get_high_score();
   info_snake.speed = model.get_speed();
   info_snake.level = model.get_level();
+  info_snake.pause = 0;
 
   info_snake.next = convert_snake_to_array(model.get_snake());
   info_snake.field = convert_apple_to_array(model.get_apple());

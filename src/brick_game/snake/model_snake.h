@@ -87,13 +87,6 @@ class SnakeGame {
    * @param time новое значение времени
    */
   void set_prev_time(long long int time);
-
-  // /**
-  //  * @brief установка количества очков (для тестирования)
-  //  * @param score новое значение очков
-  //  */
-  // void set_score(int score);
-
   /**
    * @brief получение текущего состояние игры
    * @return текущее состояние игры

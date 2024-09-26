@@ -9,7 +9,7 @@
  */
 typedef enum {
   /** кнопка старт */
-  Start,
+  Start = 10,
   /** кнопка пауза */
   Pause,
   /** кнопка выход */
@@ -79,39 +79,6 @@ typedef struct {
 } GameInfo_t;
 
 /**
- * @struct Game_tetris
- * @brief полная информация о текущем состоянии игры
- */
-typedef struct {
-  /** игровое поле */
-  int **field;
-  /** превью фигура */
-  int **next;
-  /** текущая фигура на поле */
-  int **now;
-  /** координата фигуры по строке */
-  int x;
-  /** координата фигуры по столбцу */
-  int y;
-  /** номер текущей фигуры */
-  int number_now_f;
-  /** номер следующей генерируемой фигуры */
-  int number_next_f;
-  /** предыдущее время падения фигуры */
-  long long int prev_time;
-  /** количество очков */
-  int score;
-  /** количество рекордных очков */
-  int high_score;
-  /** номер уровня */
-  int level;
-  /** скорость */
-  int speed;
-  /** информация о состоянии конечного автомата */
-  GameState_t state;
-} Game_tetris;
-
-/**
  * @brief получение времени в миллисекундах
  *
  * @return возвращает время в миллисекундах
@@ -121,4 +88,5 @@ inline long long int time_in_millisec() {
   gettimeofday(&tv, NULL);
   return (((long long int)tv.tv_sec) * 1000) + (tv.tv_usec / 1000);
 }
+
 #endif
