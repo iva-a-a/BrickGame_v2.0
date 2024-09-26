@@ -1,14 +1,14 @@
 #ifndef BACK_TETRIS_H
 #define BACK_TETRIS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdbool.h>
 
 #include "../defines.h"
 #include "../struct.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief получение состояния игры
@@ -18,13 +18,6 @@ extern "C" {
  */
 
 GameInfo_t *get_GameInfo();
-
-/**
- * @brief получение времени в миллисекундах
- *
- * @return возвращает время в миллисекундах
- */
-long long int time_in_millisec();
 
 /**
  * @brief иницилизация игры

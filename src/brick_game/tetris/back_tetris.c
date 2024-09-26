@@ -3,18 +3,10 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
-#include <time.h>
 
 GameInfo_t *get_GameInfo() {
   static GameInfo_t Info;
   return &Info;
-}
-
-long long int time_in_millisec() {
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-  return (((long long int)tv.tv_sec) * 1000) + (tv.tv_usec / 1000);
 }
 
 void setup_game(Game_tetris *tetris) {
@@ -32,7 +24,11 @@ void initial_info(Game_tetris *tetris) {
   for (int i = 0; i < ROWS_FIGURE; i++) {
     tetris->next[i] = (int *)calloc(sizeof(int), COL_FIGURE);
   }
-
+  tetris->now = (int **)malloc(sizeof(int *) * ROWS_FIGURE);
+  for (int i = 0; i < ROWS_FIGURE; i++) {
+    tetris->now[i] = (int *)malloc(sizeof(int) * COL_FIGURE);
+  }
+  clearing_game(tetris);
   FILE *highScore;
   highScore = fopen("highscore_tetris.txt", "r");
   if (highScore) {
@@ -40,13 +36,10 @@ void initial_info(Game_tetris *tetris) {
       tetris->high_score = 0;
     }
     fclose(highScore);
+  } else {
+    tetris->high_score = 0;
+    save_high_score(tetris);
   }
-
-  tetris->now = (int **)malloc(sizeof(int *) * ROWS_FIGURE);
-  for (int i = 0; i < ROWS_FIGURE; i++) {
-    tetris->now[i] = (int *)malloc(sizeof(int) * COL_FIGURE);
-  }
-  clearing_game(tetris);
 }
 
 void free_info(Game_tetris *tetris) {
