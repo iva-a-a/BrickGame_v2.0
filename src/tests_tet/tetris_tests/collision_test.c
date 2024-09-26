@@ -2,7 +2,7 @@
 
 START_TEST(coll_01) {
   Game_tetris *tetris = get_GameInfo();
-  initial_info();
+  initial_info(tetris);
 
   tetris->now[1][0] = 1;
   tetris->now[1][1] = 1;
@@ -12,16 +12,16 @@ START_TEST(coll_01) {
   tetris->x = 2;
   tetris->y = 8;
 
-  tetris->game_info.field[9][3] = 1;
+  tetris->field[9][3] = 1;
 
   ck_assert_int_eq(collision(tetris), 2);
-  free_info();
+  free_info(tetris);
 }
 END_TEST
 
 START_TEST(coll_02) {
   Game_tetris *tetris = get_GameInfo();
-  initial_info();
+  initial_info(tetris);
 
   tetris->now[1][0] = 1;
   tetris->now[1][1] = 1;
@@ -32,13 +32,13 @@ START_TEST(coll_02) {
   tetris->y = 18;
 
   ck_assert_int_eq(collision(tetris), 1);
-  free_info();
+  free_info(tetris);
 }
 END_TEST
 
 START_TEST(coll_03) {
   Game_tetris *tetris = get_GameInfo();
-  initial_info();
+  initial_info(tetris);
 
   tetris->now[1][0] = 1;
   tetris->now[1][1] = 1;
@@ -49,7 +49,7 @@ START_TEST(coll_03) {
   tetris->y = 5;
 
   ck_assert_int_eq(collision(tetris), 0);
-  free_info();
+  free_info(tetris);
 }
 END_TEST
 
