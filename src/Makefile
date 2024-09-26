@@ -1,14 +1,17 @@
 CPP = g++
-CPPFLAGS = -g -Wall -Werror -Wextra -std=c++17
-#TESTFLAGS = -lgtest -lsubunit -pthread
-LDLIBS = 
+CFLAGS = -Wall -Werror -Wextra
+CPPFLAGS += $(CFLAGS) -std=c++17
+TESTFLAGS = -lgtest -lsubunit -pthread
+LDLIBS = -fprofile-arcs -ftest-coverage
 
-LIBDIR_TET =brick_game/tetris
+LIBDIR_TET = brick_game/tetris
 LIBDIR_SN = brick_game/snake
 
-GUIDIR_TET =gui/cli/cli_tetris
-GUIDIR_SN =gui/cli/cli_snake
+GUIDIR_TET = gui/cli/cli_tetris
+GUIDIR_SN = gui/cli/cli_snake
 GUIDIR = gui/cli
+
+
 
 BINDIR = ./bin
 
@@ -17,17 +20,19 @@ LIBRARY_SN = snake.a
 
 SOURCES_C = $(wildcard $(LIBDIR_TET)/*.c) $(wildcard $(GUIDIR_TET)/*.c) $(wildcard $(GUIDIR)/*.c)
 SOURCES_CPP = $(wildcard $(LIBDIR_SN)/*.cpp) $(wildcard $(GUIDIR_SN)/*.cpp) $(wildcard $(GUIDIR)/*.cpp)
+SOURCES_TEST = $(wildcard ./tests/*.cpp)
+
 
 OBJECTS_C = $(SOURCES_C:.c=.o)
 OBJECTS_CPP =  $(SOURCES_CPP:.cpp=.o)
-
+OBJECTS_TEST = $(SOURCES_TEST:.cpp=.o)
 
 GAME_CONSOLE = console
 GAME_DESKTOP = desktop
 GAME = brickgame
 GAME_VERSION = 2.0
 
-ALL_SRC = $(wildcard   */*/*.c */*/*/*.c */*/*.cpp */*/*/*.cpp */*.h */*/*.h */*/*/*.h)
+ALL_SRC = $(wildcard */*/*.c */*/*/*.c */*.cpp */*/*.cpp */*/*/*.cpp */*.h */*/*.h */*/*/*.h)
 
 .PHONY: all install uninstall clean dvi dist $(GAME_CONSOLE) $(GAME_DESKTOP)
 
@@ -47,7 +52,7 @@ $(GAME_DESKTOP):
 	mv desk/desktop ./build_desk
 	rm -rf desk
 
-install: clean all $(GAME_CONSOLE) $(GAME_DESKTOP)
+install: clean $(GAME_CONSOLE) $(GAME_DESKTOP)
 	mkdir $(BINDIR)
 	cp build_desk/$(GAME_DESKTOP) $(BINDIR)
 	cp build_cli/$(GAME_CONSOLE) $(BINDIR)
@@ -57,7 +62,7 @@ uninstall:
 
 dvi:
 	doxygen
-	xdg-open doxygen/html/index.html
+#open doxygen/html/index.html
 
 dist:
 	mkdir $(GAME)-$(GAME_VERSION)
@@ -65,15 +70,25 @@ dist:
 	tar -czf $(GAME)-$(GAME_VERSION).tar.gz $(GAME)-$(GAME_VERSION)
 	rm -rf $(GAME)-$(GAME_VERSION)
 
-test:
+test: clean $(OBJECTS_TEST) $(LIBRARY_SN)
+	$(CPP) $(CPPFLAGS) $(OBJECTS_TEST) -o test -L. -l:$(LIBRARY_SN) $(TESTFLAGS)
+	rm -f $(OBJECTS_TEST)
+	./test
+
+gcov_report: CPPFLAGS += $(LDLIBS)
+gcov_report: clean $(LIBRARY_SN)
+	$(CPP) $(CPPFLAGS) -o gcov_r $(SOURCES_TEST) -L. -l:$(LIBRARY_SN) $(TESTFLAGS)
+	mkdir coverage_report
+	./gcov_r
+	python3 -m gcovr -r . --html --html-details -o coverage_report/index.html --exclude test
+#open coverage_report/index.html
 
 clean:
-	rm -f $(GAME) $(LIBDIR_TET)/*.o $(GUIDIR_TET)/*.o  $(GUIDIR)/*.o $(LIBDIR_SN)/*.o  $(GUIDIR_SN)/*.o *.a
+	rm -f $(GAME) $(LIBDIR_TET)/*.o $(GUIDIR_TET)/*.o  $(GUIDIR)/*.o $(LIBDIR_SN)/*.o  $(GUIDIR_SN)/*.o  ./tests/*.o
+	rm -f *.a test
 	rm -f *.txt *.gz
-	rm -rf doxygen
-	rm -rf desk
-	rm -rf build_cli
-	rm -rf build_desk
+	rm -f  gcov* coverage.info *.gcov */*.gcov */*.gcda */*.gcno */*/*.gcov */*/*.gcda */*/*.gcno
+	rm -rf doxygen desk build_cli build_desk coverage_report
 
 %.o: %.c
 	$(CPP) $(CPPFLAGS) -c -o $@ $<
@@ -96,3 +111,6 @@ clang:
 	cp ./../materials/linters/.clang-format ./
 	clang-format -i $(ALL_SRC)
 	rm -f .clang-format
+
+valgrind:
+	valgrind --tool=memcheck --leak-check=yes ./test
