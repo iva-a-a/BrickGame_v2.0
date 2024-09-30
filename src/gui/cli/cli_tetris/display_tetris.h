@@ -10,6 +10,14 @@
 void print_stats_tetris();
 
 /**
+ * @brief отрисовка игрового поля, заполняемого фигурами
+ * @param arr указатель на входную матрицу
+ * @param row количество строк матрицы
+ * @param col количество столбцов матрицы
+ */
+void print_fallfigure(int **arr, int row, int col);
+
+/**
  * @brief очистка места для отрисовки превью фигуры
  */
 void clear_next_figure();

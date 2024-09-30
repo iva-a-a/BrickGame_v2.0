@@ -13,6 +13,21 @@ TetrisWidget::TetrisWidget(QMainWindow *parent) : CommonDraw(parent) {
 
 TetrisWidget::~TetrisWidget() { delete timer; }
 
+void TetrisWidget::draw_fallfigure(int **arr, int row, int col, QPainter &p) {
+  if (arr != NULL) {
+    for (int i = 0; i < row; i++) {
+      for (int j = 0; j < col; j++) {
+        if (arr[i][j] != 0) {
+          QColor color = get_color(arr[i][j]);
+          p.fillRect(j * SIZE_RECT, i * SIZE_RECT, SIZE_RECT, SIZE_RECT,
+                     QBrush(color));
+          p.drawRect(j * SIZE_RECT, i * SIZE_RECT, SIZE_RECT, SIZE_RECT);
+        }
+      }
+    }
+  }
+}
+
 void TetrisWidget::draw_stat_tetris(QPainter &p) {
   p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 18 + 25, "SPACE - move");
   p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT, "Next:");
@@ -58,9 +73,10 @@ void TetrisWidget::paintEvent(QPaintEvent *event) {
 
   if (state != Begin) {
     draw_board(p);
-    draw_arr(info.field, p, Qt::black);
-    draw_arr(info.next, p, Qt::black);
-    draw_banner_stat(p, info.level, info.speed, info.score, info.high_score);
+    draw_fallfigure(info.field, ROWS_BOARD, COL_BOARD, p);
+    draw_arr(info.next, p);
+    draw_banner_stat(p, info.level, info.speed, info.score, info.high_score,
+                     1000);
     draw_stat_tetris(p);
   }
   if (state == Begin) {

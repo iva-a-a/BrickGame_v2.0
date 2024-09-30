@@ -27,7 +27,7 @@ void SnakeDisplay::printCurrentState(GameInfo_t &info) {
     print_start();
   } else if (state == End) {
     if (info.score == SCORE_WIN) {
-      print_stats(info.level, info.speed, info.score, info.high_score);
+      print_stats(info.level, info.speed, info.score, info.high_score, 500);
       print_win();
     } else {
       print_game_over();
@@ -35,7 +35,7 @@ void SnakeDisplay::printCurrentState(GameInfo_t &info) {
   } else {
     print_game_board();
     print_stats_ban();
-    print_stats(info.level, info.speed, info.score, info.high_score);
+    print_stats(info.level, info.speed, info.score, info.high_score, 500);
     print_arr(info.field);
     print_arr(info.next);
     if (state == Break) {

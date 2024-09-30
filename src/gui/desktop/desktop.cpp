@@ -17,12 +17,36 @@ void CommonDraw::setup_painter(QPainter &p) {
   p.setFont(font);
 }
 
-void CommonDraw::draw_arr(int **arr, QPainter &p, const QColor &color) {
+QColor CommonDraw::get_color(int c) {
+  switch (c) {
+    case 1:
+      return QColor(Qt::cyan);
+    case 2:
+      return QColor(Qt::blue);
+    case 3:
+      return QColor(255, 165, 0);
+    case 4:
+      return QColor(Qt::yellow);
+    case 5:
+      return QColor(Qt::green);
+    case 6:
+      return QColor(128, 0, 128);
+    case 7:
+      return QColor(Qt::red);
+    default:
+      return QColor(Qt::black);
+  }
+}
+
+void CommonDraw::draw_arr(int **arr, QPainter &p) {
   if (arr != nullptr) {
     size_t i = 0;
-    while (arr[i][0] != -1 && arr[i][1] != -1) {
+    while (arr[i][0] != -1 && arr[i][1] != -1 && arr[i][2] != -1) {
+      QColor color = get_color(arr[i][2]);
       p.fillRect(arr[i][1] * SIZE_RECT, arr[i][0] * SIZE_RECT, SIZE_RECT,
                  SIZE_RECT, QBrush(color));
+      p.drawRect(arr[i][1] * SIZE_RECT, arr[i][0] * SIZE_RECT, SIZE_RECT,
+                 SIZE_RECT);
       i++;
     }
   }
@@ -49,11 +73,11 @@ void CommonDraw::draw_gameover(QPainter &p) {
 }
 
 void CommonDraw::draw_banner_stat(QPainter &p, int level, int speed, int score,
-                                  int h_score) {
+                                  int h_score, int begin_speed) {
   std::string l = "Level: " + std::to_string(level);
   p.drawText(SIZE_RECT * 10 + 5, SIZE_RECT * 4 + 25, l.data());
 
-  float speedSn = (float)500 / speed;
+  float speedSn = (float)begin_speed / speed;
   std::ostringstream oss;
   oss << std::fixed << std::setprecision(2) << speedSn;
   std::string sp = "Speed: " + oss.str();

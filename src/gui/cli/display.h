@@ -69,7 +69,9 @@ void print_arr(int **arr);
  * @param speed скорость игры
  * @param score количество очков
  * @param high_score количество рекордных очков
+ * @param begin_speed начальная скорость движения
  */
-void print_stats(int level, int speed, int score, int high_score);
+void print_stats(int level, int speed, int score, int high_score,
+                 int begin_speed);
 
 #endif

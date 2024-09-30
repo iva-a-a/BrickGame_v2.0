@@ -198,7 +198,6 @@ void update_game(Game_tetris *tetris);
  * входной матрицы и сдвиг их на заданные значения x и y
  *
  *@param arr1 указатель на входную матрицу
- *
  * @param row количество строк в матрице
  * @param col количество столбцов в матрице
  * @param x значение, на которое будет сдвинута строка (горизонтально)
@@ -209,17 +208,24 @@ void update_game(Game_tetris *tetris);
 int **convert_matrix(int **arr1, int row, int col, int x, int y);
 
 /**
+ * @brief устанавливает код цвета для кажого элемента матрицы
+ *
+ * @param arr указатель на входную матрицу
+ * @param color номер цвета
+ */
+void set_color_third_elem(int **arr, int color);
+/**
  * @brief соединение двух матриц
  *
- * @param arr1 массив указателей на строки матрицы 1
- * @param arr2 массив указателей на строки матрицы 2
+ * @param arr1 указатель на входную матрицу 1
+ * @param arr2 указатель на входную матрицу 2
  */
 int **join_matrix(int **arr1, int **arr2);
 
 /**
  * @brief очистка памяти под матрицу
  *
- * @param arr массив указателей на строки матрицы
+ * @param arr указатель на входную матрицу
  */
 void free_matrix(int **arr);
 

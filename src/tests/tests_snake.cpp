@@ -1,7 +1,5 @@
 #include "s21_tests.h"
 
-// using namespace s21;
-
 class TestSnake : public s21::SnakeGame {
  public:
   TestSnake() = default;
@@ -302,12 +300,16 @@ TEST(ControllSnakeGameTest, ConvertSnake) {
 
   ASSERT_EQ(arr[0][0], 0);
   ASSERT_EQ(arr[0][1], 0);
+  ASSERT_EQ(arr[0][2], 0);
   ASSERT_EQ(arr[1][0], 1);
   ASSERT_EQ(arr[1][1], 0);
+  ASSERT_EQ(arr[1][2], 0);
   ASSERT_EQ(arr[2][0], 1);
   ASSERT_EQ(arr[2][1], 0);
+  ASSERT_EQ(arr[2][2], 0);
   ASSERT_EQ(arr[3][0], -1);
   ASSERT_EQ(arr[3][1], -1);
+  ASSERT_EQ(arr[3][2], -1);
 
   controller.free_array(arr);
 }
@@ -319,8 +321,10 @@ TEST(ControllSnakeGameTest, ConvertAppleToArray) {
 
   ASSERT_EQ(arr[0][0], 1);
   ASSERT_EQ(arr[0][1], 1);
+  ASSERT_EQ(arr[0][2], 7);
   ASSERT_EQ(arr[1][0], -1);
   ASSERT_EQ(arr[1][1], -1);
+  ASSERT_EQ(arr[1][2], -1);
 
   controller.free_array(arr);
 }
@@ -338,14 +342,19 @@ TEST(ControllSnakeGameTest, UpdateCurrentState) {
   int **appleArray = info.field;
   ASSERT_EQ(snakeArray[0][0], 18);
   ASSERT_EQ(snakeArray[0][1], 5);
+  ASSERT_EQ(snakeArray[0][2], 0);
   ASSERT_EQ(snakeArray[1][0], 17);
   ASSERT_EQ(snakeArray[1][1], 5);
+  ASSERT_EQ(snakeArray[1][2], 0);
   ASSERT_EQ(snakeArray[2][0], 16);
   ASSERT_EQ(snakeArray[2][1], 5);
+  ASSERT_EQ(snakeArray[2][2], 0);
   ASSERT_EQ(snakeArray[3][0], 15);
   ASSERT_EQ(snakeArray[3][1], 5);
+  ASSERT_EQ(snakeArray[3][2], 0);
   ASSERT_EQ(snakeArray[4][0], -1);
   ASSERT_EQ(snakeArray[4][1], -1);
+  ASSERT_EQ(snakeArray[4][2], -1);
 
   ASSERT_NE(appleArray, nullptr);
 

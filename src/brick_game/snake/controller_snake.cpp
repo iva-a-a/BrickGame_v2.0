@@ -6,14 +6,16 @@ int **Controller::convert_snake_to_array(std::list<Coordinate> snake) {
   int **arr = new int *[snake.size() + 1];
   size_t index = 0;
   for (auto &i : snake) {
-    arr[index] = new int[2];
+    arr[index] = new int[3];
     arr[index][0] = i.x;
     arr[index][1] = i.y;
+    arr[index][2] = 0;
     index++;
   }
-  arr[index] = new int[2];
+  arr[index] = new int[3];
   arr[index][0] = -1;
   arr[index][1] = -1;
+  arr[index][2] = -1;
   return arr;
 }
 
@@ -21,21 +23,23 @@ int **Controller::convert_apple_to_array(Coordinate apple) {
   int **arr = new int *[2];
   size_t index = 0;
 
-  arr[index] = new int[2];
+  arr[index] = new int[3];
   arr[index][0] = apple.x;
   arr[index][1] = apple.y;
+  arr[index][2] = 7;
   index++;
 
-  arr[index] = new int[2];
+  arr[index] = new int[3];
   arr[index][0] = -1;
   arr[index][1] = -1;
+  arr[index][2] = -1;
   return arr;
 }
 
 void Controller::free_array(int **arr) {
   if (arr != nullptr) {
     size_t i = 0;
-    while (arr[i][0] != -1 && arr[i][1] != -1) {
+    while (arr[i][0] != -1 && arr[i][1] != -1 && arr[i][2] != -1) {
       delete[] arr[i];
       i++;
     }

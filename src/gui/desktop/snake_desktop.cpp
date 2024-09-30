@@ -26,9 +26,10 @@ void SnakeWidget::paintEvent(QPaintEvent *event) {
   GameState_t state = controller.get_model()->get_state();
   if (state != Begin) {
     draw_board(p);
-    draw_arr(info.field, p, Qt::red);
-    draw_arr(info.next, p, Qt::black);
-    draw_banner_stat(p, info.level, info.speed, info.score, info.high_score);
+    draw_arr(info.field, p);
+    draw_arr(info.next, p);
+    draw_banner_stat(p, info.level, info.speed, info.score, info.high_score,
+                     500);
   }
   if (state == Begin) {
     draw_start(p);

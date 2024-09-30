@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QColor>
 #include <QMainWindow>
 #include <QPainter>
 #include <QWidget>
@@ -38,12 +39,18 @@ class CommonDraw : public QWidget {
   void setup_painter(QPainter &p);
 
   /**
+   * @brief получение цвета для заданного id цвета
+   * @param c номер цвета
+   * @return Объект QColor, соответствующий значению c
+   */
+  QColor get_color(int c);
+
+  /**
    * @brief отрисовка двумерного массива
    * @param arr указатель на массив
    * @param p ссылка на объект QPainter для рисования
-   * @param color цвет, которым будет рисоваться массив
    */
-  void draw_arr(int **arr, QPainter &p, const QColor &color);
+  void draw_arr(int **arr, QPainter &p);
 
   /**
    * @brief отрисовка игрового поля
@@ -73,9 +80,10 @@ class CommonDraw : public QWidget {
    * @param speed скорость игры
    * @param score количество очков
    * @param h_score количество рекордных очков
+   * @param begin_speed начальная скорость движения
    */
   void draw_banner_stat(QPainter &p, int level, int speed, int score,
-                        int h_score);
+                        int h_score, int begin_speed);
 
  protected:
   QMainWindow *parent; /**< указатель на родительское окно */

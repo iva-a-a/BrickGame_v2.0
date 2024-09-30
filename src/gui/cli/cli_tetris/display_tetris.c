@@ -13,6 +13,17 @@ void clear_next_figure() {
   }
 }
 
+void print_fallfigure(int **arr, int row, int col) {
+  if (arr != NULL) {
+    for (int i = 0; i < row; i++) {
+      for (int j = 0; j < col; j++) {
+        if (arr[i][j] != 0) {
+          mvprintw(i + 1, j * 2 + 1, "[]");
+        }
+      }
+    }
+  }
+}
 void printCurrentState(GameInfo_t *info) {
   int *state = &info->pause;
   if (*state == Begin) {
@@ -23,8 +34,8 @@ void printCurrentState(GameInfo_t *info) {
     print_game_board();
     print_stats_ban();
     print_stats_tetris();
-    print_stats(info->level, info->speed, info->score, info->high_score);
-    print_arr(info->field);
+    print_stats(info->level, info->speed, info->score, info->high_score, 1000);
+    print_fallfigure(info->field, ROWS_BOARD, COL_BOARD);
     clear_next_figure();
     print_arr(info->next);
     if (*state == Break) {

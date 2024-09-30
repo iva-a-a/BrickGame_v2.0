@@ -164,7 +164,7 @@ void filling_field(Game_tetris *tetris) {
   for (int i = 0; i < ROWS_FIGURE; i++) {
     for (int j = 0; j < COL_FIGURE; j++) {
       if (tetris->y + i >= 0 && tetris->x + j >= 0 && tetris->now[i][j] == 1) {
-        tetris->field[tetris->y + i][tetris->x + j] = 1;
+        tetris->field[tetris->y + i][tetris->x + j] = tetris->number_now_f + 1;
       }
     }
   }
@@ -226,7 +226,7 @@ int collision(Game_tetris *tetris) {
         int x = tetris->x + j, y = tetris->y + i;
         if (x < 0 || x >= COL_BOARD || y >= ROWS_BOARD || y < 0) {
           is_col = 1; /*касание с краями поля*/
-        } else if (tetris->field[y][x] == 1) {
+        } else if (tetris->field[y][x] != 0) {
           is_col = 2; /*касание с фигурой на поле*/
         }
       }
@@ -293,16 +293,34 @@ void update_game(Game_tetris *tetris) {
 
   GameInfo_t *info = get_GameInfo();
   if (info) {
-    info->field = convert_matrix(tetris->field, ROWS_BOARD, COL_BOARD, 0, 0);
-    int **t_next = convert_matrix(tetris->next, ROWS_FIGURE, COL_FIGURE, 1, 12);
-    int **t_now = convert_matrix(tetris->now, ROWS_FIGURE, COL_FIGURE,
-                                 tetris->y, tetris->x);
-    info->next = join_matrix(t_next, t_now);
+    info->field = tetris->field;
 
+    if (tetris->state != End) {
+      int **t_now = convert_matrix(tetris->now, ROWS_FIGURE, COL_FIGURE,
+                                   tetris->y, tetris->x);
+      set_color_third_elem(t_now, tetris->number_now_f + 1);
+      int **t_next =
+          convert_matrix(tetris->next, ROWS_FIGURE, COL_FIGURE, 1, 12);
+      set_color_third_elem(t_next, tetris->number_next_f + 1);
+
+      info->next = join_matrix(t_next, t_now);
+    } else {
+      int **t_now = convert_matrix(tetris->now, ROWS_FIGURE, COL_FIGURE, 1, 12);
+      set_color_third_elem(t_now, tetris->number_now_f + 1);
+      info->next = t_now;
+    }
     info->score = tetris->score;
     info->high_score = tetris->high_score;
     info->level = tetris->level;
     info->speed = tetris->speed;
+  }
+}
+
+void set_color_third_elem(int **arr, int color) {
+  int i = 0;
+  while (arr[i][0] != -1 && arr[i][1] != -1 && arr[i][2] != -1) {
+    arr[i][2] = color;
+    i++;
   }
 }
 
@@ -320,47 +338,50 @@ int **convert_matrix(int **arr1, int row, int col, int x, int y) {
   for (int i = 0; i < row; i++) {
     for (int j = 0; j < col; j++) {
       if (arr1[i][j] == 1) {
-        mat[k] = (int *)malloc(2 * sizeof(int));
+        mat[k] = (int *)malloc(3 * sizeof(int));
         mat[k][0] = i + x;
         mat[k][1] = j + y;
+        mat[k][2] = 0;
         k++;
       }
     }
   }
-  mat[k] = (int *)malloc(2 * sizeof(int));
+  mat[k] = (int *)malloc(3 * sizeof(int));
   mat[k][0] = -1;
   mat[k][1] = -1;
+  mat[k][2] = -1;
   return mat;
 }
 
 int **join_matrix(int **arr1, int **arr2) {
   int i = 0;
   int count = 0;
-  while (arr1[i][0] != -1 && arr1[i][1] != -1) {
+  while (arr1[i][0] != -1 && arr1[i][1] != -1 && arr1[i][2] != -1) {
     i++;
     count++;
   }
   i = 0;
-  while (arr2[i][0] != -1 && arr2[i][1] != -1) {
+  while (arr2[i][0] != -1 && arr2[i][1] != -1 && arr2[i][2] != -1) {
     i++;
     count++;
   }
   int **mat = (int **)malloc((count + 1) * sizeof(int *));
   i = 0;
   int j = 0;
-  while (arr1[i][0] != -1 && arr1[i][1] != -1) {
+  while (arr1[i][0] != -1 && arr1[i][1] != -1 && arr1[i][2] != -1) {
     mat[j] = arr1[i];
     i++;
     j++;
   }
   free(arr1[i]);
   i = 0;
-  while (arr2[i][0] != -1 && arr2[i][1] != -1) {
+  while (arr2[i][0] != -1 && arr2[i][1] != -1 && arr2[i][2] != -1) {
     mat[j] = arr2[i];
     i++;
     j++;
   }
   mat[j] = arr2[i];
+
   free(arr1);
   free(arr2);
   return mat;
@@ -369,7 +390,7 @@ int **join_matrix(int **arr1, int **arr2) {
 void free_matrix(int **arr) {
   if (arr) {
     size_t i = 0;
-    while (arr[i][0] != -1 && arr[i][1] != -1) {
+    while (arr[i][0] != -1 && arr[i][1] != -1 && arr[i][2] != -1) {
       free(arr[i]);
       i++;
     }
@@ -378,7 +399,4 @@ void free_matrix(int **arr) {
   }
 }
 
-void free_gameinfo(GameInfo_t *info) {
-  free_matrix(info->field);
-  free_matrix(info->next);
-}
+void free_gameinfo(GameInfo_t *info) { free_matrix(info->next); }

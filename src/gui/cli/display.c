@@ -116,16 +116,17 @@ void print_game_over() {
 void print_arr(int **arr) {
   if (arr != NULL) {
     size_t i = 0;
-    while (arr[i][0] != -1 && arr[i][1] != -1) {
+    while (arr[i][0] != -1 && arr[i][1] != -1 && arr[i][2] != -1) {
       mvprintw(arr[i][0] + 1, arr[i][1] * 2 + 1, "[]");
       i++;
     }
   }
 }
 
-void print_stats(int level, int speed, int score, int high_score) {
+void print_stats(int level, int speed, int score, int high_score,
+                 int begin_speed) {
   mvprintw(6, 29, "%d", level);
-  mvprintw(9, 29, "%.2f", (float)500 / speed);
+  mvprintw(9, 29, "%.2f", (float)begin_speed / speed);
   mvprintw(12, 29, "%d", score);
   mvprintw(15, 29, "%d", high_score);
 }

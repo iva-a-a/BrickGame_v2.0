@@ -27,6 +27,15 @@ class TetrisWidget : public CommonDraw {
   ~TetrisWidget();
 
   /**
+   * @brief отрисовка двумерного массива
+   * @param arr указатель на массив
+   * @param row количество строк
+   * @param col количество столбцов
+   * @param p ссылка на объект QPainter для рисования
+   */
+  void draw_fallfigure(int **arr, int row, int col, QPainter &p);
+
+  /**
    * @brief вывод статистики для игры "Тетрис"
    * @param p ссылка на объект QPainter для рисования
    */
