@@ -11,8 +11,6 @@ GUIDIR_TET = gui/cli/cli_tetris
 GUIDIR_SN = gui/cli/cli_snake
 GUIDIR = gui/cli
 
-
-
 BINDIR = ./bin
 
 LIBRARY_TET = tetris.a
@@ -21,7 +19,6 @@ LIBRARY_SN = snake.a
 SOURCES_C = $(wildcard $(LIBDIR_TET)/*.c) $(wildcard $(GUIDIR_TET)/*.c) $(wildcard $(GUIDIR)/*.c)
 SOURCES_CPP = $(wildcard $(LIBDIR_SN)/*.cpp) $(wildcard $(GUIDIR_SN)/*.cpp) $(wildcard $(GUIDIR)/*.cpp)
 SOURCES_TEST = $(wildcard ./tests/*.cpp)
-
 
 OBJECTS_C = $(SOURCES_C:.c=.o)
 OBJECTS_CPP =  $(SOURCES_CPP:.cpp=.o)
@@ -32,12 +29,12 @@ GAME_DESKTOP = desktop
 GAME = brickgame
 GAME_VERSION = 2.0
 
-ALL_SRC = $(wildcard */*/*.c */*/*/*.c */*.cpp */*/*.cpp */*/*/*.cpp */*.h */*/*.h */*/*/*.h)
+ALL_SRC = $(wildcard */*.h */*/*.h */*/*/*.h */*.c */*/*.c */*/*/*.c */*.cpp */*/*.cpp */*/*/*.cpp )
 
-.PHONY: all install uninstall clean dvi dist $(GAME_CONSOLE) $(GAME_DESKTOP)
+.PHONY: all install uninstall clean dvi dist $(GAME_CONSOLE) $(GAME_DESKTOP) test
 
 
-all: $(GAME_DESKTOP)
+all: $(GAME_DESKTOP) $(GAME_CONSOLE)
 
 $(GAME_CONSOLE): $(OBJECTS_C) $(OBJECTS_CPP) $(LIBRARY_TET) $(LIBRARY_SN)
 	mkdir -p build_cli
@@ -103,9 +100,6 @@ $(LIBRARY_TET): $(LIBDIR_TET)/back_tetris.o
 $(LIBRARY_SN): $(LIBDIR_SN)/controller_snake.o $(LIBDIR_SN)/model_snake.o
 	ar rcs $@ $^
 	ranlib $@
-
-cppcheck:
-	cppcheck --std=c++17 --enable=all --language=c++ --suppress=missingIncludeSystem $(ALL_SRC)
 
 clang:
 	cp ./../materials/linters/.clang-format ./
