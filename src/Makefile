@@ -1,8 +1,8 @@
 CPP = g++
 CFLAGS = -Wall -Werror -Wextra
 CPPFLAGS += $(CFLAGS) -std=c++17
-TESTFLAGS = -lgtest -lsubunit -pthread
-LDLIBS = -fprofile-arcs -ftest-coverage
+	TESTFLAGS = -lgtest -lsubunit -pthread
+	LDLIBS = -fprofile-arcs -ftest-coverage
 
 LIBDIR_TET = brick_game/tetris
 LIBDIR_SN = brick_game/snake
@@ -43,11 +43,13 @@ $(GAME_CONSOLE): $(OBJECTS_C) $(OBJECTS_CPP) $(LIBRARY_TET) $(LIBRARY_SN)
 
 $(GAME_DESKTOP):
 	mkdir desk
-	cd desk && qmake ../gui/desktop
+	cd desk && qmake6 ../gui/desktop
 	cd desk && make
 	mkdir -p build_desk
 	mv desk/desktop ./build_desk
 	rm -rf desk
+	@clear
+	@echo Build in "build_desk/".
 
 install: clean $(GAME_CONSOLE) $(GAME_DESKTOP)
 	mkdir $(BINDIR)
@@ -59,11 +61,12 @@ uninstall:
 
 dvi:
 	doxygen
-#open doxygen/html/index.html
+	@clear
+	@open doxygen/html/index.html || xdg-open doxygen/html/index.html || echo "Please open doxygen/html/index.html manually."
 
 dist:
 	mkdir $(GAME)-$(GAME_VERSION)
-	cp brick_game gui Makefile $(GAME)-$(GAME_VERSION) -r
+	cp -r brick_game gui Makefile $(GAME)-$(GAME_VERSION)
 	tar -czf $(GAME)-$(GAME_VERSION).tar.gz $(GAME)-$(GAME_VERSION)
 	rm -rf $(GAME)-$(GAME_VERSION)
 
@@ -78,7 +81,8 @@ gcov_report: clean $(LIBRARY_SN)
 	mkdir coverage_report
 	./gcov_r
 	python3 -m gcovr -r . --html --html-details -o coverage_report/index.html --exclude test
-#open coverage_report/index.html
+#@clear
+	@xdg-open $(GCOV_DIR)/index.html || open $(GCOV_DIR)/index.html || echo "Please open $(GCOV_DIR)/index.html manually."
 
 clean:
 	rm -f $(GAME) $(LIBDIR_TET)/*.o $(GUIDIR_TET)/*.o  $(GUIDIR)/*.o $(LIBDIR_SN)/*.o  $(GUIDIR_SN)/*.o  ./tests/*.o
