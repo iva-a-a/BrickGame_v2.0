@@ -38,3 +38,6 @@ SOURCES += brick_game_desk.cpp \
            ../../brick_game/snake/model_snake.cpp \
            ../../brick_game/tetris/back_tetris.c \
            ../../brick_game/tetris/controller_tetris.c \
+
+TEMPLATE = app
+CONFIG -= app_bundle
