@@ -7,8 +7,6 @@
 #include "snake_desktop.h"
 #include "tetris_desktop.h"
 
-namespace s21 {
-
 /**
  * @class MainWindow
  * @brief главное окно приложения
@@ -32,7 +30,7 @@ class MainWindow : public QMainWindow {
    */
   void setup_ui();
 
-  SnakeWidget *snake = nullptr; /**< Указатель на виджет "Змейка" */
+  SnakeWidget *snake = nullptr;   /**< Указатель на виджет "Змейка" */
   TetrisWidget *tetris = nullptr; /**< Указатель на виджет "Тетрис" */
 
   /**
@@ -50,4 +48,3 @@ class MainWindow : public QMainWindow {
    */
   void on_push_tetris_clicked();
 };
-}  // namespace s21

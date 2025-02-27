@@ -1,16 +1,16 @@
 #include "s21_tests.h"
 
-class TestSnake : public s21::SnakeGame {
+class TestSnake : public SnakeGame {
  public:
   TestSnake() = default;
   ~TestSnake() = default;
   void set_score(int score) { s_score = score; }
-  void set_apple(s21::Coordinate a) { apple = a; }
-  void set_snake(const std::list<s21::Coordinate> &s) { snake = s; }
+  void set_apple(Coordinate a) { apple = a; }
+  void set_snake(const std::list<Coordinate> &s) { snake = s; }
 };
 
 TEST(ModelSnakeGameTest, StateActionSetGet) {
-  s21::SnakeGame snake;
+  SnakeGame snake;
   EXPECT_EQ(snake.get_state(), Begin);
   snake.set_state(Exit);
   EXPECT_EQ(snake.get_state(), Exit);
@@ -21,7 +21,7 @@ TEST(ModelSnakeGameTest, StateActionSetGet) {
 }
 
 TEST(ModelSnakeGameTest, ConstClearSnake) {
-  s21::SnakeGame snake;
+  SnakeGame snake;
   EXPECT_EQ(snake.get_score(), 0);
   EXPECT_EQ(snake.get_high_score(), 0);
   EXPECT_EQ(snake.get_level(), 1);
@@ -31,7 +31,7 @@ TEST(ModelSnakeGameTest, ConstClearSnake) {
 }
 
 TEST(ModelSnakeGameTest, GetSnake) {
-  s21::SnakeGame snake;
+  SnakeGame snake;
   snake.create_snake();
   auto &coord = snake.get_snake();
   EXPECT_EQ(coord.size(), 4);
@@ -40,9 +40,9 @@ TEST(ModelSnakeGameTest, GetSnake) {
 }
 
 TEST(ModelSnakeGameTest, GetApple) {
-  s21::SnakeGame snake;
+  SnakeGame snake;
   snake.put_apple();
-  s21::Coordinate apple = snake.get_apple();
+  Coordinate apple = snake.get_apple();
   EXPECT_GE(apple.x, 0);
   EXPECT_LT(apple.x, ROWS_BOARD);
   EXPECT_GE(apple.y, 0);
@@ -50,14 +50,14 @@ TEST(ModelSnakeGameTest, GetApple) {
 }
 
 TEST(ModelSnakeGameTest, PutAppleCreateSn) {
-  s21::SnakeGame snake;
+  SnakeGame snake;
   snake.create_snake();
   snake.put_apple();
-  s21::Coordinate apple = snake.get_apple();
+  Coordinate apple = snake.get_apple();
   for (const auto &i : snake.get_snake()) {
     EXPECT_FALSE(apple.eq_coordinate(i));
   }
-  std::list<s21::Coordinate> check_snake = {{18, 5}, {17, 5}, {16, 5}, {15, 5}};
+  std::list<Coordinate> check_snake = {{18, 5}, {17, 5}, {16, 5}, {15, 5}};
 
   ASSERT_EQ(snake.get_snake().size(), check_snake.size());
 
@@ -69,17 +69,17 @@ TEST(ModelSnakeGameTest, PutAppleCreateSn) {
 }
 
 TEST(ModelSnakeGameTest, ChangeDirection) {
-  s21::SnakeGame snake;
+  SnakeGame snake;
 
   snake.create_snake();
   snake.change_direction(Down);
 
-  std::list<s21::Coordinate> check_snake = snake.get_snake();
-  s21::Coordinate head_before = check_snake.back();
+  std::list<Coordinate> check_snake = snake.get_snake();
+  Coordinate head_before = check_snake.back();
   sleep(1);
   snake.check_move_snake();
   check_snake = snake.get_snake();
-  s21::Coordinate head_after = check_snake.back();
+  Coordinate head_after = check_snake.back();
   EXPECT_EQ(head_after.y, head_before.y);
   EXPECT_EQ(head_after.x + 1, head_before.x);
 
@@ -115,10 +115,10 @@ TEST(ModelSnakeGameTest, ChangeDirection) {
 }
 
 TEST(ModelSnakeGameTest, SnakeHeadNewPos) {
-  s21::SnakeGame snake;
+  SnakeGame snake;
   snake.create_snake();
   snake.change_direction(Up);
-  s21::Coordinate newPos = snake.snake_head_new_pos();
+  Coordinate newPos = snake.snake_head_new_pos();
   EXPECT_EQ(newPos.x, snake.get_snake().back().x - 1);
   EXPECT_EQ(newPos.y, snake.get_snake().back().y);
 
@@ -139,9 +139,9 @@ TEST(ModelSnakeGameTest, SnakeHeadNewPos) {
 }
 
 TEST(ModelSnakeGameTest, Collision) {
-  s21::SnakeGame snake;
+  SnakeGame snake;
   snake.create_snake();
-  s21::Coordinate testCoor = {17, 5};
+  Coordinate testCoor = {17, 5};
   EXPECT_TRUE(snake.collision(testCoor));
 
   testCoor = {19, 5};
@@ -187,7 +187,7 @@ TEST(ModelSnakeGameTest, MoveSnake) {
 }
 
 TEST(ModelSnakeGameTest, Update) {
-  s21::SnakeGame snake;
+  SnakeGame snake;
   snake.set_state(Begin);
 
   snake.update();
@@ -197,7 +197,7 @@ TEST(ModelSnakeGameTest, Update) {
   EXPECT_EQ(snake.get_speed(), 500);
   EXPECT_EQ(snake.get_currAction(), None);
   EXPECT_EQ(snake.get_state(), Begin);
-  s21::Coordinate apple = snake.get_apple();
+  Coordinate apple = snake.get_apple();
   for (const auto &i : snake.get_snake()) {
     EXPECT_FALSE(apple.eq_coordinate(i));
   }
@@ -221,11 +221,11 @@ TEST(ModelSnakeGameTest, Update) {
   snake.set_state(Falling);
   snake.change_direction(Right);
   sleep(1);
-  std::list<s21::Coordinate> check_snake = snake.get_snake();
-  s21::Coordinate head_before = check_snake.back();
+  std::list<Coordinate> check_snake = snake.get_snake();
+  Coordinate head_before = check_snake.back();
   snake.update();
   check_snake = snake.get_snake();
-  s21::Coordinate head_after = check_snake.back();
+  Coordinate head_after = check_snake.back();
   EXPECT_EQ(head_after.y, head_before.y + 1);
   EXPECT_EQ(head_after.x, head_before.x);
 
@@ -251,7 +251,7 @@ TEST(ModelSnakeGameTest, Update) {
 }
 
 TEST(ModelSnakeGameTest, SaveHighScore) {
-  s21::SnakeGame snake;
+  SnakeGame snake;
   snake.save_high_score();
   std::ifstream inputFile("highscore_snake.txt");
   int check_h_score;
@@ -294,8 +294,8 @@ TEST(ModelSnakeGameTest, IncreaseLevel) {
 }
 
 TEST(ControllSnakeGameTest, ConvertSnake) {
-  s21::Controller controller;
-  std::list<s21::Coordinate> snake = {{0, 0}, {1, 0}, {1, 0}};
+  Controller controller;
+  std::list<Coordinate> snake = {{0, 0}, {1, 0}, {1, 0}};
   int **arr = controller.convert_snake_to_array(snake);
 
   ASSERT_EQ(arr[0][0], 0);
@@ -315,8 +315,8 @@ TEST(ControllSnakeGameTest, ConvertSnake) {
 }
 
 TEST(ControllSnakeGameTest, ConvertAppleToArray) {
-  s21::Controller controller;
-  s21::Coordinate apple = {1, 1};
+  Controller controller;
+  Coordinate apple = {1, 1};
   int **arr = controller.convert_apple_to_array(apple);
 
   ASSERT_EQ(arr[0][0], 1);
@@ -330,7 +330,7 @@ TEST(ControllSnakeGameTest, ConvertAppleToArray) {
 }
 
 TEST(ControllSnakeGameTest, UpdateCurrentState) {
-  s21::Controller controller;
+  Controller controller;
   GameInfo_t info = controller.updateCurrentState();
 
   ASSERT_EQ(info.score, 0);
@@ -362,7 +362,7 @@ TEST(ControllSnakeGameTest, UpdateCurrentState) {
 }
 
 TEST(ControllSnakeGameTest, UserInput) {
-  s21::Controller controller;
+  Controller controller;
   controller.userInput(Start, false);
   ASSERT_EQ(controller.get_model()->get_state(), Generation);
 
@@ -396,15 +396,15 @@ TEST(ControllSnakeGameTest, UserInput) {
   ASSERT_EQ(controller.get_model()->get_state(), Exit);
 
   controller.get_model()->set_state(Falling);
-  s21::Coordinate headPos = controller.get_model()->snake_head_new_pos();
+  Coordinate headPos = controller.get_model()->snake_head_new_pos();
   controller.userInput(Left, true);
-  s21::Coordinate newHeadPos = controller.get_model()->snake_head_new_pos();
+  Coordinate newHeadPos = controller.get_model()->snake_head_new_pos();
   EXPECT_EQ(newHeadPos.x, headPos.x - 1);
   EXPECT_EQ(newHeadPos.y, headPos.y);
 }
 
 TEST(ControllSnakeGameTest, GetModel) {
-  s21::Controller controller;
-  s21::SnakeGame *model = controller.get_model();
+  Controller controller;
+  SnakeGame *model = controller.get_model();
   ASSERT_NE(model, nullptr);
 }

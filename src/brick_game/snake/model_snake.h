@@ -7,8 +7,6 @@
 #include "../defines.h"
 #include "../struct.h"
 
-namespace s21 {
-
 /**
  * @enum Direction
  * @brief направление движения змейки
@@ -49,10 +47,10 @@ struct Coordinate {
  */
 class SnakeGame {
  private:
-  Direction dir;     /**< направление движения змейки*/
-  GameState_t state; /**< состояние игры */
+  Direction dir;              /**< направление движения змейки*/
+  GameState_t state;          /**< состояние игры */
   UserAction_t currentAction; /**< текущее действие игрока */
-  long long int prev_time; /**< предыдущее время падения фигуры */
+  long long int prev_time;    /**< предыдущее время падения фигуры */
 
   int s_high_score; /**< количество рекордных очков */
   int s_level;      /**< номер уровня */
@@ -183,5 +181,3 @@ class SnakeGame {
    */
   void update();
 };
-
-}  // namespace s21

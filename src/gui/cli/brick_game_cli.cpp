@@ -15,8 +15,8 @@ int main() {
       game_tetris();
       clear_screen();
     } else if (key == 's' || key == 'S') {
-      s21::Controller controller;
-      s21::SnakeDisplay game(&controller);
+      Controller controller;
+      SnakeDisplay game(&controller);
       game.game_snake();
       clear_screen();
     }

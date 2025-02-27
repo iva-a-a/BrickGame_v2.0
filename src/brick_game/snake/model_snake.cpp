@@ -1,7 +1,6 @@
 #include "model_snake.h"
 
 #include <algorithm>
-using namespace s21;
 
 SnakeGame::SnakeGame() {
   srand(time(NULL));

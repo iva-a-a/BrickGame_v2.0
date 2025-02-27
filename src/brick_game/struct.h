@@ -3,6 +3,11 @@
 
 #include <sys/time.h>
 #include <time.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @enum UserAction_t
  * @brief пользовательское действие
@@ -88,5 +93,9 @@ inline long long int time_in_millisec() {
   gettimeofday(&tv, NULL);
   return (((long long int)tv.tv_sec) * 1000) + (tv.tv_usec / 1000);
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

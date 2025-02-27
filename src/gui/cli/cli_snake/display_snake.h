@@ -2,8 +2,6 @@
 
 #include "../../../brick_game/snake/controller_snake.h"
 #include "../display.h"
-
-namespace s21 {
 /**
  * @class SnakeDisplay
  * @brief класс для отображения игры "Змейка" в терминале
@@ -40,4 +38,3 @@ class SnakeDisplay {
    */
   void printCurrentState(GameInfo_t &info);
 };
-}  // namespace s21

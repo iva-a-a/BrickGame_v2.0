@@ -10,7 +10,7 @@
  * @brief размер одного пикселя
  */
 #define SIZE_RECT 30
-namespace s21 {
+
 /**
  * @class CommonDraw
  * @brief класс для работы с рисованием в приложении на основе Qt (общая
@@ -88,4 +88,3 @@ class CommonDraw : public QWidget {
  protected:
   QMainWindow *parent; /**< указатель на родительское окно */
 };
-}  // namespace s21

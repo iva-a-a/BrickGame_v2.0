@@ -5,6 +5,10 @@
 
 #include "../../brick_game/tetris/back_tetris.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief иницилизация графического интерфейса программы
  */
@@ -73,5 +77,9 @@ void print_arr(int **arr);
  */
 void print_stats(int level, int speed, int score, int high_score,
                  int begin_speed);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,7 +1,5 @@
 #include "main_window.h"
 
-using namespace s21;
-
 MainWindow::MainWindow() { setup_ui(); }
 
 MainWindow::~MainWindow() { delete_game(); }

@@ -4,8 +4,6 @@
 #include <sstream>
 #include <string>
 
-using namespace s21;
-
 void CommonDraw::setup_window() {
   setFixedSize(SIZE_RECT * 10 + 200, SIZE_RECT * 20 + 10);
   setFocusPolicy(Qt::StrongFocus);

@@ -1,7 +1,5 @@
 #include "tetris_desktop.h"
 
-using namespace s21;
-
 TetrisWidget::TetrisWidget(QMainWindow *parent) : CommonDraw(parent) {
   setup_game(&_game);
   QWidget::setWindowTitle("Tetris");

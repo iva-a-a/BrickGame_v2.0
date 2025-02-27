@@ -7,8 +7,6 @@
 #include "../../brick_game/tetris/controller_tetris.h"
 #include "desktop.h"
 
-namespace s21 {
-
 /**
  * @class TetrisWidget
  * @brief класс для отображения игры "Тетрис" на основе Qt
@@ -56,7 +54,7 @@ class TetrisWidget : public CommonDraw {
   void paintEvent(QPaintEvent *event) override;
 
  private:
-  QTimer *timer; /**< таймер для обновления состояния игры */
+  QTimer *timer;     /**< таймер для обновления состояния игры */
   Game_tetris _game; /**< объект игры "Тетрис" */
 
  private slots:
@@ -65,5 +63,3 @@ class TetrisWidget : public CommonDraw {
    */
   void update_display();
 };
-
-}  // namespace s21

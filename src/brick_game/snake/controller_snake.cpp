@@ -1,7 +1,5 @@
 #include "controller_snake.h"
 
-using namespace s21;
-
 int **Controller::convert_snake_to_array(std::list<Coordinate> snake) {
   int **arr = new int *[snake.size() + 1];
   size_t index = 0;

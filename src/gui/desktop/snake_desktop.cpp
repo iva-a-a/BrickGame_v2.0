@@ -1,7 +1,5 @@
 #include "snake_desktop.h"
 
-using namespace s21;
-
 SnakeWidget::SnakeWidget(QMainWindow *parent)
     : CommonDraw(parent), controller{} {
   QWidget::setWindowTitle("Snake");

@@ -4,6 +4,10 @@
 #include "../../../brick_game/tetris/controller_tetris.h"
 #include "../display.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief вывод информации для тетриса
  */
@@ -33,5 +37,9 @@ void printCurrentState(GameInfo_t *info);
  * @brief бесконечный цикл игры
  */
 void game_tetris();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,7 +1,5 @@
 #include "display_snake.h"
 
-using namespace s21;
-
 SnakeDisplay::SnakeDisplay(Controller *c) : controller{c} {}
 
 void SnakeDisplay::print_win() {

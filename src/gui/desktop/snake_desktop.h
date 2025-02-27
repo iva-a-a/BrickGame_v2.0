@@ -6,8 +6,6 @@
 #include "../../brick_game/snake/controller_snake.h"
 #include "desktop.h"
 
-namespace s21 {
-
 /**
  * @class SnakeWidget
  * @brief класс для отображения игры "Змейка" на основе Qt
@@ -46,8 +44,8 @@ class SnakeWidget : public CommonDraw {
   void paintEvent(QPaintEvent *event) override;
 
  private:
-  s21::Controller controller; /**< контроллер игры "Змейка"*/
-  QTimer *timer; /**< таймер для обновления состояния игры */
+  Controller controller; /**< контроллер игры "Змейка"*/
+  QTimer *timer;         /**< таймер для обновления состояния игры */
 
  private slots:
   /**
@@ -55,5 +53,3 @@ class SnakeWidget : public CommonDraw {
    */
   void update_display();
 };
-
-}  // namespace s21

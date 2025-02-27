@@ -2,8 +2,6 @@
 
 #include "model_snake.h"
 
-namespace s21 {
-
 /**
  * @class Controller
  * @brief класс, отвечающий за управление игрой "Змейка"
@@ -70,4 +68,3 @@ class Controller {
    */
   SnakeGame *get_model();
 };
-}  // namespace s21
