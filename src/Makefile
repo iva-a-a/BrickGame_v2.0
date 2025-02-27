@@ -1,8 +1,10 @@
 CPP = g++
+C = gcc -std=c11
 CFLAGS = -Wall -Werror -Wextra
 CPPFLAGS += $(CFLAGS) -std=c++17
-	TESTFLAGS = -lgtest -lsubunit -pthread
-	LDLIBS = -fprofile-arcs -ftest-coverage
+
+TESTFLAGS = -lgtest -lsubunit -pthread
+LDLIBS = -fprofile-arcs -ftest-coverage
 
 LIBDIR_TET = brick_game/tetris
 LIBDIR_SN = brick_game/snake
@@ -92,7 +94,7 @@ clean:
 	rm -rf doxygen desk build_cli build_desk coverage_report
 
 %.o: %.c
-	$(CPP) $(CPPFLAGS) -c -o $@ $<
+	$(C) $(CFLAGS) -c -o $@ $<
 
 %.o: %.cpp
 	$(CPP) $(CPPFLAGS) -c -o $@ $<
